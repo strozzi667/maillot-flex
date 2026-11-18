@@ -1,8 +1,10 @@
 import os
 import uuid
 import json
+import threading
 from functools import wraps
 
+import certifi
 import mysql.connector
 from mysql.connector import Error
 
@@ -13,6 +15,7 @@ from flask import (
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+
 
 # ==================================================
 # CONFIGURATION MAILLOT FLEX
@@ -45,14 +48,29 @@ ADMIN_EMAIL = os.environ.get(
 
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
 
-DB_NAME = "maillot_flex"
+DB_NAME = os.environ.get("DB_NAME", "maillot_flex")
+DB_HOST = os.environ.get("DB_HOST", "localhost")
 
 DB_CONFIG = {
-    "host": os.environ.get("DB_HOST", "localhost"),
-    "user": os.environ.get("DB_USER", "root"),
+    "host": DB_HOST,
+    "user": os.environ.get(
+        "DB_USER",
+        "root" if DB_HOST == "localhost" else "fsyRNaqcDJZSxtJ.root"
+    ),
     "password": os.environ.get("DB_PASSWORD", ""),
-    "port": int(os.environ.get("DB_PORT", "3306"))
+    "port": int(os.environ.get(
+        "DB_PORT",
+        "3306" if DB_HOST == "localhost" else "4000"
+    ))
 }
+
+# TLS obligatoire pour l'endpoint public TiDB Cloud
+if DB_HOST != "localhost":
+    DB_CONFIG.update({
+        "ssl_ca": certifi.where(),
+        "ssl_verify_cert": True,
+        "ssl_verify_identity": True
+    })
 
 EXTENSIONS_AUTORISEES = {
     "jpg", "jpeg", "png", "webp"
@@ -62,8 +80,9 @@ EXTENSIONS_AUDIO = {
     "mp3", "wav", "ogg"
 }
 
+
 # ==================================================
-# CONNEXION MYSQL
+# CONNEXION MYSQL / TIDB CLOUD
 # ==================================================
 
 def connexion_mysql(avec_base=True):
@@ -74,6 +93,7 @@ def connexion_mysql(avec_base=True):
         config["database"] = DB_NAME
 
     return mysql.connector.connect(**config)
+
 
 # ==================================================
 # OUTILS POUR LES FICHIERS
@@ -87,6 +107,7 @@ def extension_autorisee(nom_fichier, extensions):
     extension = nom_fichier.rsplit(".", 1)[1].lower()
 
     return extension in extensions
+
 
 def enregistrer_fichier(fichier, dossier, extensions):
 
@@ -107,12 +128,12 @@ def enregistrer_fichier(fichier, dossier, extensions):
 
     return nom_unique
 
+
 def supprimer_fichier(dossier, nom_fichier):
 
     if not nom_fichier:
         return
 
-    # Ne pas supprimer une image hébergée sur Internet
     if str(nom_fichier).startswith(("http://", "https://")):
         return
 
@@ -122,6 +143,7 @@ def supprimer_fichier(dossier, nom_fichier):
 
     if os.path.isfile(chemin):
         os.remove(chemin)
+
 
 # ==================================================
 # CATALOGUE INITIAL DES MAILLOTS
@@ -246,34 +268,39 @@ def inserer_catalogue_initial(curseur):
 
     print(f"{ajoutes} nouveaux maillots ajoutés au catalogue.")
 
+
 # ==================================================
 # INITIALISATION DE LA BASE DE DONNÉES
 # ==================================================
 
 def initialiser_base():
 
-    connexion = connexion_mysql(avec_base=False)
-    curseur = connexion.cursor()
+    # Création automatique de la base uniquement en local.
+    # Sur TiDB, on utilise la base sélectionnée dans Render.
 
-    try:
+    if DB_HOST == "localhost":
 
-        curseur.execute(
-            f"CREATE DATABASE IF NOT EXISTS {DB_NAME} "
-            "CHARACTER SET utf8mb4 "
-            "COLLATE utf8mb4_unicode_ci"
-        )
+        connexion = connexion_mysql(avec_base=False)
+        curseur = connexion.cursor()
 
-    finally:
+        try:
 
-        curseur.close()
-        connexion.close()
+            curseur.execute(
+                f"CREATE DATABASE IF NOT EXISTS {DB_NAME} "
+                "CHARACTER SET utf8mb4 "
+                "COLLATE utf8mb4_unicode_ci"
+            )
+
+        finally:
+
+            curseur.close()
+            connexion.close()
 
     connexion = connexion_mysql()
     curseur = connexion.cursor()
 
     try:
 
-        # Administrateurs
         curseur.execute("""
             CREATE TABLE IF NOT EXISTS administrateurs (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -283,7 +310,6 @@ def initialiser_base():
             )
         """)
 
-        # Produits
         curseur.execute("""
             CREATE TABLE IF NOT EXISTS produits (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -300,7 +326,6 @@ def initialiser_base():
             )
         """)
 
-        # Galerie de photos
         curseur.execute("""
             CREATE TABLE IF NOT EXISTS produit_photos (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -314,7 +339,6 @@ def initialiser_base():
             )
         """)
 
-        # Musiques
         curseur.execute("""
             CREATE TABLE IF NOT EXISTS musiques (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -325,7 +349,6 @@ def initialiser_base():
             )
         """)
 
-        # Commandes
         curseur.execute("""
             CREATE TABLE IF NOT EXISTS commandes (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -338,7 +361,6 @@ def initialiser_base():
             )
         """)
 
-        # Compatibilité avec les anciennes bases
         nouvelles_colonnes = {
             "commune": "VARCHAR(100)",
             "instructions": "TEXT",
@@ -358,7 +380,6 @@ def initialiser_base():
                     f"{nom_colonne} {type_colonne}"
                 )
 
-        # Création de l'administrateur si nécessaire
         curseur.execute(
             "SELECT id FROM administrateurs WHERE email = %s",
             (ADMIN_EMAIL,)
@@ -389,17 +410,47 @@ def initialiser_base():
 
             print("ATTENTION : ADMIN_PASSWORD n'est pas défini.")
 
-        # Ajouter les maillots initiaux sans doublons
         inserer_catalogue_initial(curseur)
 
         connexion.commit()
 
         print("Base MAILLOT FLEX prête.")
 
+    except Exception:
+
+        connexion.rollback()
+        raise
+
     finally:
 
         curseur.close()
         connexion.close()
+
+
+# ==================================================
+# INITIALISATION AUTOMATIQUE POUR RENDER
+# ==================================================
+
+_initialisation_verrou = threading.Lock()
+_base_initialisee = False
+
+
+@app.before_request
+def verifier_initialisation_base():
+
+    global _base_initialisee
+
+    if _base_initialisee:
+        return
+
+    with _initialisation_verrou:
+
+        if _base_initialisee:
+            return
+
+        initialiser_base()
+        _base_initialisee = True
+
 
 # ==================================================
 # PROTECTION ADMINISTRATEUR
@@ -416,6 +467,7 @@ def administrateur_requis(fonction):
         return fonction(*args, **kwargs)
 
     return verifier
+
 
 # ==================================================
 # ACCUEIL
@@ -448,6 +500,7 @@ def accueil():
         curseur.close()
         connexion.close()
 
+
 # ==================================================
 # BOUTIQUE
 # ==================================================
@@ -478,6 +531,7 @@ def boutique():
 
         curseur.close()
         connexion.close()
+
 
 # ==================================================
 # DÉTAILS D'UN PRODUIT
@@ -525,6 +579,7 @@ def detail_produit(produit_id):
         curseur.close()
         connexion.close()
 
+
 # ==================================================
 # PANIER
 # ==================================================
@@ -533,6 +588,7 @@ def detail_produit(produit_id):
 def panier():
 
     return render_template("panier.html")
+
 
 # ==================================================
 # PAGE DE COMMANDE
@@ -543,8 +599,9 @@ def passer_commande():
 
     return render_template("commande.html")
 
+
 # ==================================================
-# ENREGISTREMENT DE LA COMMANDE
+# ENREGISTREMENT ET CONFIRMATION DE COMMANDE
 # ==================================================
 
 @app.route(
@@ -743,6 +800,7 @@ def confirmation_commande():
         if connexion and connexion.is_connected():
             connexion.close()
 
+
 # ==================================================
 # CONNEXION ADMINISTRATEUR
 # ==================================================
@@ -812,6 +870,7 @@ def admin_login():
 
     return render_template("connexion.html")
 
+
 # ==================================================
 # TABLEAU DE BORD ADMINISTRATEUR
 # ==================================================
@@ -827,7 +886,6 @@ def admin_dashboard():
 
         curseur = connexion.cursor(dictionary=True)
 
-        # Produits
         curseur.execute("""
             SELECT *
             FROM produits
@@ -836,7 +894,6 @@ def admin_dashboard():
 
         produits = curseur.fetchall()
 
-        # Galerie de chaque produit
         for produit in produits:
 
             curseur.execute("""
@@ -848,7 +905,6 @@ def admin_dashboard():
 
             produit["photos"] = curseur.fetchall()
 
-        # Commandes
         curseur.execute("""
             SELECT *
             FROM commandes
@@ -872,7 +928,6 @@ def admin_dashboard():
 
                 commande["articles"] = []
 
-        # Musiques
         curseur.execute("""
             SELECT *
             FROM musiques
@@ -899,6 +954,7 @@ def admin_dashboard():
         if connexion and connexion.is_connected():
             connexion.close()
 
+
 # ==================================================
 # AJOUTER UN MAILLOT
 # ==================================================
@@ -911,13 +967,9 @@ def ajouter_produit():
     club = request.form.get("club", "").strip()
 
     categorie = request.form.get("categorie", "club")
-
     type_maillot = request.form.get("type_maillot", "")
-
     saison = request.form.get("saison", "").strip()
-
     tailles = request.form.get("tailles", "")
-
     description = request.form.get("description", "").strip()
 
     try:
@@ -1060,6 +1112,7 @@ def ajouter_produit():
             connexion.close()
 
     return redirect(url_for("admin_dashboard"))
+
 
 # ==================================================
 # MODIFIER UN MAILLOT
@@ -1211,6 +1264,7 @@ def modifier_produit(produit_id):
 
     return redirect(url_for("admin_dashboard"))
 
+
 # ==================================================
 # SUPPRIMER UNE PHOTO DE LA GALERIE
 # ==================================================
@@ -1262,6 +1316,7 @@ def supprimer_photo(photo_id):
         connexion.close()
 
     return redirect(url_for("admin_dashboard"))
+
 
 # ==================================================
 # SUPPRIMER UN MAILLOT
@@ -1333,6 +1388,7 @@ def supprimer_produit(produit_id):
 
     return redirect(url_for("admin_dashboard"))
 
+
 # ==================================================
 # AJOUTER UNE MUSIQUE
 # ==================================================
@@ -1342,7 +1398,6 @@ def supprimer_produit(produit_id):
 def ajouter_musique():
 
     fichier = request.files.get("musique")
-
     nom = request.form.get("nom", "").strip()
 
     if not fichier or not fichier.filename:
@@ -1415,6 +1470,7 @@ def ajouter_musique():
 
     return redirect(url_for("admin_dashboard"))
 
+
 # ==================================================
 # ACTIVER OU DÉSACTIVER UNE MUSIQUE
 # ==================================================
@@ -1448,6 +1504,7 @@ def changer_etat_musique(musique_id):
         connexion.close()
 
     return redirect(url_for("admin_dashboard"))
+
 
 # ==================================================
 # SUPPRIMER UNE MUSIQUE
@@ -1501,6 +1558,7 @@ def supprimer_musique(musique_id):
 
     return redirect(url_for("admin_dashboard"))
 
+
 # ==================================================
 # DÉCONNEXION ADMINISTRATEUR
 # ==================================================
@@ -1513,6 +1571,7 @@ def admin_deconnexion():
     flash("Vous êtes déconnecté.")
 
     return redirect(url_for("admin_login"))
+
 
 # ==================================================
 # ERREURS DE TÉLÉVERSEMENT
@@ -1527,6 +1586,7 @@ def fichier_trop_lourd(erreur):
         413
     )
 
+
 # ==================================================
 # DÉMARRAGE DE L'APPLICATION
 # ==================================================
@@ -1536,6 +1596,7 @@ if __name__ == "__main__":
     try:
 
         initialiser_base()
+        _base_initialisee = True
 
         app.run(
             host="127.0.0.1",
@@ -1548,5 +1609,5 @@ if __name__ == "__main__":
         print("ERREUR MYSQL :", erreur)
 
         print(
-            "Vérifie que MySQL est démarré dans Laragon."
+            "Vérifie les paramètres de connexion à MySQL ou TiDB Cloud."
         )
