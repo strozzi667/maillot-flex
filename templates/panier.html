@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon panier | MAILLOT FLEX</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+    --black:#080a09;
+    --panel:#111612;
+    --green:#b7ff35;
+    --white:#fff;
+    --muted:#a4aaa6;
+    --border:#252b26;
+}
+
+body{
+    background:var(--black);
+    color:var(--white);
+    font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+header{
+    padding:22px 7%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+}
+
+.logo{
+    color:white;
+    font-size:24px;
+    font-weight:900;
+    text-decoration:none;
+}
+
+.logo span{color:var(--green)}
+
+header a.retour{
+    color:var(--green);
+    font-size:11px;
+    font-weight:800;
+    text-decoration:none;
+}
+
+main{
+    max-width:1100px;
+    margin:55px auto;
+    padding:0 20px;
+}
+
+.titre{margin-bottom:30px}
+
+.titre small{
+    color:var(--green);
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:2px;
+}
+
+.titre h1{
+    font-size:35px;
+    margin-top:10px;
+}
+
+.contenu{
+    display:grid;
+    grid-template-columns:1.6fr .8fr;
+    gap:25px;
+    align-items:start;
+}
+
+.liste,.resume{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:25px;
+}
+
+.liste h2,.resume h2{
+    font-size:18px;
+    margin-bottom:20px;
+}
+
+.article{
+    display:grid;
+    grid-template-columns:100px 1fr auto;
+    gap:18px;
+    align-items:center;
+    padding:18px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.article:last-child{border-bottom:none}
+
+.article img{
+    width:100px;
+    height:110px;
+    object-fit:contain;
+    background:#1b221c;
+    border-radius:5px;
+    padding:5px;
+}
+
+.article h3{
+    font-size:14px;
+    margin-bottom:7px;
+}
+
+.article p{
+    color:var(--muted);
+    font-size:11px;
+    margin-bottom:8px;
+}
+
+.article strong{
+    color:var(--green);
+    font-size:14px;
+}
+
+.quantite{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-top:12px;
+}
+
+.quantite button{
+    background:#242c25;
+    color:white;
+    border:1px solid #343e35;
+    width:29px;
+    height:29px;
+    border-radius:4px;
+    cursor:pointer;
+    font-size:17px;
+}
+
+.quantite button:hover{background:var(--green);color:#080a09}
+
+.supprimer{
+    background:transparent;
+    color:#ff7777;
+    border:none;
+    font-size:11px;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+.supprimer:hover{text-decoration:underline}
+
+.article-prix{
+    white-space:nowrap;
+    text-align:right;
+}
+
+.ligne{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin:17px 0;
+    color:#b8beb9;
+    font-size:12px;
+}
+
+.ligne strong{color:white}
+
+.ligne.total{
+    border-top:1px solid #333b34;
+    padding-top:20px;
+    color:white;
+    font-size:16px;
+    font-weight:900;
+}
+
+.ligne.total strong{color:var(--green)}
+
+.bouton{
+    display:block;
+    width:100%;
+    background:var(--green);
+    color:#080a09;
+    text-align:center;
+    padding:16px;
+    border:none;
+    border-radius:4px;
+    text-decoration:none;
+    font-size:11px;
+    font-weight:900;
+    margin-top:22px;
+    cursor:pointer;
+}
+
+.bouton:hover{background:white}
+
+.bouton:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+}
+
+.note{
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.7;
+    margin-top:15px;
+}
+
+.vide{
+    text-align:center;
+    padding:65px 15px;
+    color:var(--muted);
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:8px;
+}
+
+.vide h2{color:white;margin-bottom:12px}
+
+.vide a{
+    display:inline-block;
+    margin-top:20px;
+    color:var(--green);
+    text-decoration:none;
+    font-size:12px;
+    font-weight:800;
+}
+
+@media(max-width:750px){
+    .contenu{grid-template-columns:1fr}
+    .titre h1{font-size:28px}
+    .liste,.resume{padding:16px}
+    .article{grid-template-columns:75px 1fr;gap:12px}
+    .article img{width:75px;height:90px}
+    .article-prix{grid-column:2;text-align:left}
+}
+
+@media(max-width:400px){
+    header{padding:18px 5%}
+    .logo{font-size:20px}
+    header a.retour{font-size:9px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <a href="/" class="logo">MAILLOT<span>FLEX.</span></a>
+    <a href="/boutique" class="retour">← CONTINUER MES ACHATS</a>
+</header>
+
+<main>
+    <div class="titre">
+        <small>MAILLOT FLEX / BOUTIQUE</small>
+        <h1>MON PANIER</h1>
+    </div>
+
+    <div id="panierVide" class="vide" style="display:none">
+        <h2>Ton panier est vide.</h2>
+        <p>Découvre nos maillots et choisis les couleurs de ton équipe.</p>
+        <a href="/boutique">DÉCOUVRIR LES MAILLOTS →</a>
+    </div>
+
+    <div class="contenu" id="panierContenu">
+
+        <div class="liste">
+            <h2>Mes articles</h2>
+            <div id="listeArticles"></div>
+        </div>
+
+        <div class="resume">
+            <h2>Résumé de la commande</h2>
+
+            <div class="ligne">
+                <span>Sous-total</span>
+                <strong id="sousTotal">$0.00</strong>
+            </div>
+
+            <div class="ligne">
+                <span>Livraison</span>
+                <strong>5 000 FC</strong>
+            </div>
+
+            <div class="ligne total">
+                <span>Total des articles</span>
+                <strong id="totalArticles">$0.00</strong>
+            </div>
+
+            <a href="/commande" class="bouton" id="boutonCommande">
+                PASSER LA COMMANDE →
+            </a>
+
+            <p class="note">
+                Prix des maillots en dollars. Frais de livraison de 5 000 FC.
+                Le montant final sera confirmé avant validation.
+            </p>
+        </div>
+
+    </div>
+</main>
+
+<script>
+const CLE_PANIER = "mailFlexCart";
+
+function lirePanier(){
+    try{
+        const donnees = JSON.parse(localStorage.getItem(CLE_PANIER));
+        return Array.isArray(donnees) ? donnees : [];
+    }catch{
+        return [];
+    }
+}
+
+function enregistrerPanier(panier){
+    localStorage.setItem(CLE_PANIER,JSON.stringify(panier));
+}
+
+function afficherPanier(){
+    const panier = lirePanier();
+    const liste = document.getElementById("listeArticles");
+    const contenu = document.getElementById("panierContenu");
+    const vide = document.getElementById("panierVide");
+    const bouton = document.getElementById("boutonCommande");
+
+    liste.innerHTML = "";
+
+    if(panier.length === 0){
+        contenu.style.display = "none";
+        vide.style.display = "block";
+        return;
+    }
+
+    contenu.style.display = "grid";
+    vide.style.display = "none";
+
+    let total = 0;
+
+    panier.forEach((article,index)=>{
+        const prix = Number(article.price) || 12;
+        const quantite = Math.max(1,parseInt(article.quantity,10)||1);
+        const montant = prix * quantite;
+
+        total += montant;
+
+        const element = document.createElement("div");
+        element.className = "article";
+
+        const image = document.createElement("img");
+        image.src = article.image || "";
+        image.alt = article.name || "Maillot";
+        image.onerror = function(){
+            this.onerror = null;
+            this.src = "/static/images/maillot-placeholder.png";
+        };
+
+        const details = document.createElement("div");
+
+        const nom = document.createElement("h3");
+        nom.textContent = article.name || "Maillot de football";
+
+        const taille = document.createElement("p");
+        taille.textContent = "Taille : " + (article.size || "M");
+
+        const prixTexte = document.createElement("strong");
+        prixTexte.textContent = "$" + prix.toFixed(2);
+
+        const controles = document.createElement("div");
+        controles.className = "quantite";
+
+        const moins = document.createElement("button");
+        moins.textContent = "−";
+        moins.type = "button";
+        moins.setAttribute("aria-label","Diminuer la quantité");
+        moins.addEventListener("click",()=>modifierQuantite(index,-1));
+
+        const nombre = document.createElement("span");
+        nombre.textContent = quantite;
+
+        const plus = document.createElement("button");
+        plus.textContent = "+";
+        plus.type = "button";
+        plus.setAttribute("aria-label","Augmenter la quantité");
+        plus.addEventListener("click",()=>modifierQuantite(index,1));
+
+        const supprimer = document.createElement("button");
+        supprimer.className = "supprimer";
+        supprimer.textContent = "Supprimer";
+        supprimer.type = "button";
+        supprimer.addEventListener("click",()=>supprimerArticle(index));
+
+        controles.append(moins,nombre,plus);
+        details.append(nom,taille,prixTexte,controles,supprimer);
+
+        const montantArticle = document.createElement("strong");
+        montantArticle.className = "article-prix";
+        montantArticle.textContent = "$" + montant.toFixed(2);
+
+        element.append(image,details,montantArticle);
+        liste.appendChild(element);
+    });
+
+    document.getElementById("sousTotal").textContent = "$"+total.toFixed(2);
+    document.getElementById("totalArticles").textContent = "$"+total.toFixed(2);
+    bouton.style.display = "block";
+}
+
+function modifierQuantite(index,changement){
+    const panier = lirePanier();
+
+    if(!panier[index]) return;
+
+    const quantite = (parseInt(panier[index].quantity,10)||1)+changement;
+
+    if(quantite <= 0){
+        panier.splice(index,1);
+    }else{
+        panier[index].quantity = quantite;
+    }
+
+    enregistrerPanier(panier);
+    afficherPanier();
+}
+
+function supprimerArticle(index){
+    const panier = lirePanier();
+    panier.splice(index,1);
+    enregistrerPanier(panier);
+    afficherPanier();
+}
+
+afficherPanier();
+</script>
+
+</body>
+</html>

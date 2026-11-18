@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Commande confirmée | MAILLOT FLEX</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        :root{
+            --black:#080a09;
+            --panel:#111612;
+            --green:#b7ff35;
+            --white:#ffffff;
+            --muted:#a4aaa6;
+            --border:#252b26;
+        }
+
+        body{
+            background:var(--black);
+            color:white;
+            font-family:'Plus Jakarta Sans',sans-serif;
+            min-height:100vh;
+        }
+
+        header{
+            padding:22px 7%;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            border-bottom:1px solid var(--border);
+        }
+
+        .logo{
+            font-size:23px;
+            font-weight:900;
+            color:white;
+            text-decoration:none;
+        }
+
+        .logo span{
+            color:var(--green);
+        }
+
+        .retour{
+            color:var(--green);
+            text-decoration:none;
+            font-size:11px;
+            font-weight:800;
+        }
+
+        main{
+            max-width:850px;
+            margin:65px auto;
+            padding:0 20px;
+        }
+
+        .confirmation{
+            text-align:center;
+            margin-bottom:35px;
+        }
+
+        .icone{
+            width:85px;
+            height:85px;
+            background:rgba(183,255,53,.10);
+            border:1px solid var(--green);
+            border-radius:50%;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            margin:0 auto 25px;
+            color:var(--green);
+            font-size:42px;
+        }
+
+        .confirmation small{
+            color:var(--green);
+            font-size:10px;
+            font-weight:900;
+            letter-spacing:2px;
+        }
+
+        .confirmation h1{
+            font-size:32px;
+            margin:13px 0;
+        }
+
+        .confirmation p{
+            color:var(--muted);
+            font-size:12px;
+            line-height:1.8;
+        }
+
+        .numero{
+            display:inline-block;
+            margin-top:20px;
+            padding:13px 20px;
+            background:var(--panel);
+            border:1px solid var(--border);
+            border-radius:5px;
+            font-size:12px;
+        }
+
+        .numero strong{
+            color:var(--green);
+        }
+
+        .bloc{
+            background:var(--panel);
+            border:1px solid var(--border);
+            border-radius:8px;
+            padding:25px;
+            margin-bottom:20px;
+        }
+
+        .bloc h2{
+            font-size:16px;
+            margin-bottom:20px;
+        }
+
+        .ligne{
+            display:flex;
+            justify-content:space-between;
+            gap:15px;
+            padding:13px 0;
+            border-bottom:1px solid var(--border);
+            font-size:11px;
+        }
+
+        .ligne:last-child{
+            border-bottom:none;
+        }
+
+        .ligne span{
+            color:var(--muted);
+        }
+
+        .ligne strong{
+            text-align:right;
+            overflow-wrap:anywhere;
+        }
+
+        .articles{
+            display:flex;
+            flex-direction:column;
+            gap:15px;
+        }
+
+        .article{
+            display:flex;
+            justify-content:space-between;
+            gap:15px;
+            padding:13px 0;
+            border-bottom:1px solid var(--border);
+            font-size:12px;
+        }
+
+        .article:last-child{
+            border-bottom:none;
+        }
+
+        .article span{
+            color:var(--muted);
+        }
+
+        .total{
+            color:var(--green);
+            font-size:17px;
+        }
+
+        .message{
+            background:rgba(183,255,53,.06);
+            border:1px solid rgba(183,255,53,.25);
+            padding:18px;
+            border-radius:6px;
+            color:#d8e9c1;
+            font-size:11px;
+            line-height:1.8;
+            margin-top:20px;
+        }
+
+        .actions{
+            display:flex;
+            gap:12px;
+            margin-top:25px;
+        }
+
+        .bouton{
+            flex:1;
+            display:block;
+            text-align:center;
+            padding:16px;
+            border-radius:5px;
+            text-decoration:none;
+            font-size:10px;
+            font-weight:900;
+            transition:.2s;
+        }
+
+        .principal{
+            background:var(--green);
+            color:var(--black);
+        }
+
+        .secondaire{
+            border:1px solid var(--border);
+            color:white;
+        }
+
+        .bouton:hover{
+            transform:translateY(-2px);
+        }
+
+        footer{
+            text-align:center;
+            color:#707a71;
+            font-size:10px;
+            padding:30px 15px;
+        }
+
+        @media(max-width:600px){
+            header{
+                padding:18px 5%;
+            }
+
+            .confirmation h1{
+                font-size:25px;
+            }
+
+            .bloc{
+                padding:18px;
+            }
+
+            .actions{
+                flex-direction:column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="/" class="logo">MAILLOT<span>FLEX.</span></a>
+    <a href="/boutique" class="retour">RETOURNER À LA BOUTIQUE →</a>
+</header>
+
+<main>
+
+    <section class="confirmation">
+
+        <div class="icone">✓</div>
+
+        <small>MAILLOT FLEX / COMMANDE</small>
+
+        <h1>MERCI POUR TA COMMANDE !</h1>
+
+        <p>
+            Ta commande a été enregistrée.
+            Notre équipe prendra contact avec toi pour confirmer
+            les détails et organiser la livraison.
+        </p>
+
+        <div class="numero">
+            Numéro de commande :
+            <strong>
+                #{{ numero or commande.numero or commande.id or 'En attente' }}
+            </strong>
+        </div>
+
+    </section>
+
+    <section class="bloc">
+
+        <h2>Informations du client</h2>
+
+        <div class="ligne">
+            <span>Nom complet</span>
+            <strong>{{ commande.nom }}</strong>
+        </div>
+
+        <div class="ligne">
+            <span>Téléphone</span>
+            <strong>{{ commande.telephone }}</strong>
+        </div>
+
+        <div class="ligne">
+            <span>Commune</span>
+            <strong>{{ commande.commune }}</strong>
+        </div>
+
+        <div class="ligne">
+            <span>Adresse</span>
+            <strong>{{ commande.adresse }}</strong>
+        </div>
+
+        {% if commande.instructions %}
+        <div class="ligne">
+            <span>Instructions</span>
+            <strong>{{ commande.instructions }}</strong>
+        </div>
+        {% endif %}
+
+    </section>
+
+    <section class="bloc">
+
+        <h2>Ma commande</h2>
+
+        <div class="articles">
+
+            {% for article in articles %}
+
+            <div class="article">
+                <div>
+                    <strong>{{ article.nom }}</strong>
+                    <br>
+                    <span>
+                        Taille : {{ article.taille }}
+                        · Quantité : {{ article.quantite }}
+                    </span>
+                </div>
+
+                <strong>
+                    ${{ "%.2f"|format(article.prix|float * article.quantite|int) }}
+                </strong>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="ligne">
+            <span>Sous-total</span>
+            <strong>${{ "%.2f"|format(sous_total|float) }}</strong>
+        </div>
+
+        <div class="ligne">
+            <span>Livraison</span>
+            <strong>5 000 FC</strong>
+        </div>
+
+        <div class="ligne total">
+            <span>Total des articles</span>
+            <strong>${{ "%.2f"|format(sous_total|float) }}</strong>
+        </div>
+
+        <div class="message">
+            <strong>Prochaine étape :</strong><br>
+            Nous allons te contacter au numéro communiqué
+            pour confirmer ta commande et les modalités de livraison.
+            Merci d'avoir choisi MAILLOT FLEX !
+        </div>
+
+    </section>
+
+    <div class="actions">
+
+        <a href="/boutique" class="bouton principal">
+            CONTINUER MES ACHATS →
+        </a>
+
+        <a href="/" class="bouton secondaire">
+            RETOUR À L'ACCUEIL
+        </a>
+
+    </div>
+
+</main>
+
+<footer>
+    © 2026 MAILLOT FLEX — TON CLUB, TA PASSION, TON MAILLOT.
+</footer>
+
+</body>
+</html>

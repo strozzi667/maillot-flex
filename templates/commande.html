@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finaliser ma commande | MAILLOT FLEX</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#080a09;color:white;font-family:'Plus Jakarta Sans',sans-serif}
+        header{padding:22px 7%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #252b26}
+        .logo{font-size:23px;font-weight:900;color:white;text-decoration:none}
+        .logo span{color:#b7ff35}
+        header a:last-child{color:#b7ff35;text-decoration:none;font-size:12px;font-weight:800}
+        main{max-width:1050px;margin:55px auto;padding:0 20px}
+        .titre{margin-bottom:30px}
+        .titre small{color:#b7ff35;font-size:10px;font-weight:900;letter-spacing:2px}
+        .titre h1{font-size:34px;margin-top:10px}
+        .titre p{color:#a4aaa6;font-size:12px;margin-top:10px}
+        .grille{display:grid;grid-template-columns:1.3fr .7fr;gap:25px;align-items:start}
+        .bloc{background:#111612;border:1px solid #252b26;border-radius:8px;padding:27px}
+        .bloc h2{font-size:18px;margin-bottom:8px}
+        .description{color:#a4aaa6;font-size:11px;margin-bottom:25px}
+        .formulaire{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+        .champ{display:flex;flex-direction:column;gap:9px}
+        .complet{grid-column:1/-1}
+        label{font-size:11px;font-weight:800}
+        input,select,textarea{width:100%;padding:14px;background:#080a09;color:white;border:1px solid #303a31;border-radius:5px;font-family:inherit;font-size:12px;outline:none}
+        input:focus,select:focus,textarea:focus{border-color:#b7ff35}
+        textarea{min-height:90px;resize:vertical}
+        .resume-ligne{display:flex;justify-content:space-between;gap:10px;margin:18px 0;color:#b8beb9;font-size:12px}
+        .resume-ligne strong{color:white}
+        .total{border-top:1px solid #303a31;padding-top:20px;font-size:17px;font-weight:900}
+        .bouton{width:100%;background:#b7ff35;color:#080a09;border:0;border-radius:5px;padding:16px;font-size:11px;font-weight:900;cursor:pointer;margin-top:20px}
+        .bouton:disabled{opacity:.6;cursor:wait}
+        .note{font-size:10px;color:#a4aaa6;line-height:1.7;margin-top:15px}
+        .erreur{display:none;background:#381818;color:#ff9999;padding:12px;border-radius:5px;font-size:12px;margin-bottom:15px}
+        @media(max-width:750px){
+            .grille{grid-template-columns:1fr}
+            .formulaire{grid-template-columns:1fr}
+            .complet{grid-column:auto}
+            .titre h1{font-size:27px}
+            .bloc{padding:19px}
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="/" class="logo">MAILLOT<span>FLEX.</span></a>
+    <a href="/panier">← RETOUR AU PANIER</a>
+</header>
+
+<main>
+    <div class="titre">
+        <small>MAILLOT FLEX / COMMANDE</small>
+        <h1>FINALISER MA COMMANDE</h1>
+        <p>Renseigne tes coordonnées pour organiser la livraison de tes maillots.</p>
+    </div>
+
+    <div class="grille">
+
+        <section class="bloc">
+            <h2>Informations du client</h2>
+            <p class="description">Tous les champs obligatoires doivent être remplis.</p>
+
+            <div class="erreur" id="erreur"></div>
+
+            <form class="formulaire" id="formCommande">
+
+                <div class="champ complet">
+                    <label>Nom complet</label>
+                    <input type="text" id="nom" name="nom"
+                           placeholder="Ton nom et prénom" required>
+                </div>
+
+                <div class="champ">
+                    <label>Numéro de téléphone</label>
+                    <input type="tel" id="telephone" name="telephone"
+                           placeholder="+243..." required>
+                </div>
+
+                <div class="champ">
+                    <label>Commune</label>
+                    <select id="commune" name="commune" required>
+                        <option value="">Choisir une commune</option>
+                        <option>Gombe</option>
+                        <option>Kinshasa</option>
+                        <option>Kintambo</option>
+                        <option>Ngaliema</option>
+                        <option>Lingwala</option>
+                        <option>Barumbu</option>
+                        <option>Bandalungwa</option>
+                        <option>Ngiri-Ngiri</option>
+                        <option>Kalamu</option>
+                        <option>Kasa-Vubu</option>
+                        <option>Matete</option>
+                        <option>Limete</option>
+                        <option>Masina</option>
+                        <option>Ndjili</option>
+                        <option>Kimbanseke</option>
+                        <option>Mont-Ngafula</option>
+                        <option>Lemba</option>
+                        <option>Ngaba</option>
+                        <option>Kisenso</option>
+                        <option>Selembao</option>
+                        <option>Bumbu</option>
+                        <option>Makala</option>
+                        <option>Maluku</option>
+                        <option>Nsele</option>
+                    </select>
+                </div>
+
+                <div class="champ complet">
+                    <label>Avenue, quartier et numéro</label>
+                    <input type="text" id="adresse" name="adresse"
+                           placeholder="Ex : Avenue ... , quartier ... , numéro ..." required>
+                </div>
+
+                <div class="champ complet">
+                    <label>Instructions supplémentaires (facultatif)</label>
+                    <textarea id="instructions" name="instructions"
+                              placeholder="Un détail utile pour trouver ton adresse..."></textarea>
+                </div>
+
+                <div class="champ complet">
+                    <button class="bouton" type="submit">
+                        ENREGISTRER MA COMMANDE →
+                    </button>
+                </div>
+
+            </form>
+        </section>
+
+        <aside class="bloc">
+            <h2>Résumé de la commande</h2>
+            <p class="description">Vérifie tes articles avant de continuer.</p>
+
+            <div id="articles"></div>
+
+            <div class="resume-ligne">
+                <span>Sous-total</span>
+                <strong id="sousTotal">$0.00</strong>
+            </div>
+
+            <div class="resume-ligne">
+                <span>Livraison</span>
+                <strong>5 000 FC</strong>
+            </div>
+
+            <div class="resume-ligne total">
+                <span>Total des articles</span>
+                <strong id="total">$0.00</strong>
+            </div>
+
+            <p class="note">
+                Les frais de livraison sont affichés séparément.
+                Le montant final sera confirmé avec le client.
+            </p>
+        </aside>
+
+    </div>
+</main>
+
+<script>
+const CLE_PANIER = "mailFlexCart";
+
+function lirePanier(){
+    try{
+        return JSON.parse(localStorage.getItem(CLE_PANIER)) || [];
+    }catch{
+        return [];
+    }
+}
+
+function afficherResume(){
+    const panier = lirePanier();
+    const articles = document.getElementById("articles");
+    let total = 0;
+
+    articles.innerHTML = "";
+
+    panier.forEach(article => {
+        const quantite = Math.max(1, Number(article.quantity) || 1);
+        const prix = Number(article.price) || 12;
+        const montant = prix * quantite;
+        total += montant;
+
+        const ligne = document.createElement("div");
+        ligne.className = "resume-ligne";
+
+        const nom = document.createElement("span");
+        nom.textContent = (article.name || "Maillot") + " × " + quantite;
+
+        const prixElement = document.createElement("strong");
+        prixElement.textContent = "$" + montant.toFixed(2);
+
+        ligne.append(nom, prixElement);
+        articles.appendChild(ligne);
+    });
+
+    document.getElementById("sousTotal").textContent = "$" + total.toFixed(2);
+    document.getElementById("total").textContent = "$" + total.toFixed(2);
+}
+
+
+// ENREGISTREMENT DE LA COMMANDE DANS FLASK
+
+document.getElementById("formCommande").addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    const panier = lirePanier();
+    const erreur = document.getElementById("erreur");
+
+    erreur.style.display = "none";
+
+    if(panier.length === 0){
+        erreur.textContent = "Ton panier est vide. Ajoute d'abord un maillot.";
+        erreur.style.display = "block";
+        return;
+    }
+
+    const donnees = {
+        nom: document.getElementById("nom").value.trim(),
+        telephone: document.getElementById("telephone").value.trim(),
+        commune: document.getElementById("commune").value,
+        adresse: document.getElementById("adresse").value.trim(),
+        instructions: document.getElementById("instructions").value.trim(),
+        panier: panier
+    };
+
+    if(!donnees.nom || !donnees.telephone || !donnees.commune || !donnees.adresse){
+        erreur.textContent = "Remplis tous les champs obligatoires.";
+        erreur.style.display = "block";
+        return;
+    }
+
+    const bouton = document.querySelector("#formCommande button[type='submit']");
+
+    bouton.disabled = true;
+    bouton.textContent = "ENREGISTREMENT EN COURS...";
+
+    try{
+
+        const reponse = await fetch("/commande/confirmation", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(donnees)
+        });
+
+        const resultat = await reponse.json();
+
+        if(!reponse.ok || !resultat.success){
+            throw new Error(resultat.message || "Impossible d'enregistrer la commande.");
+        }
+
+        localStorage.removeItem(CLE_PANIER);
+
+        window.location.href = "/commande/confirmation?numero=" + encodeURIComponent(resultat.numero);
+
+    }catch(erreurEnvoi){
+
+        erreur.textContent = erreurEnvoi.message || "Erreur de connexion au serveur.";
+        erreur.style.display = "block";
+
+        bouton.disabled = false;
+        bouton.textContent = "ENREGISTRER MA COMMANDE →";
+
+    }
+
+});
+
+afficherResume();
+
+</script>
+
+</body>
+</html>

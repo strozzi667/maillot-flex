@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Boutique | MAILLOT FLEX</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --noir: #080a09;
+            --fond: #0d100e;
+            --panneau: #131813;
+            --vert: #b7ff35;
+            --blanc: #ffffff;
+            --gris: #a1aaa3;
+            --bordure: rgba(255,255,255,.09);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--noir);
+            color: var(--blanc);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button, input, select {
+            font-family: inherit;
+        }
+
+        /* HEADER */
+
+        header {
+            height: 76px;
+            padding: 0 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--fond);
+            border-bottom: 1px solid var(--bordure);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+        }
+
+        .logo span {
+            color: var(--vert);
+        }
+
+        .navigation {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .navigation a {
+            font-size: 10px;
+            font-weight: 800;
+            color: #d2d8d3;
+            transition: .2s;
+        }
+
+        .navigation a:hover {
+            color: var(--vert);
+        }
+
+        .panier-lien {
+            background: var(--vert);
+            color: var(--noir) !important;
+            padding: 12px 17px;
+            border-radius: 4px;
+        }
+
+        /* HERO */
+
+        .hero {
+            min-height: 330px;
+            padding: 75px 7%;
+            background:
+                radial-gradient(circle at 80% 30%, rgba(183,255,53,.12), transparent 35%),
+                linear-gradient(120deg, #101610, #080a09);
+            border-bottom: 1px solid var(--bordure);
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-contenu {
+            max-width: 700px;
+        }
+
+        .hero-label {
+            color: var(--vert);
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(35px, 6vw, 65px);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -3px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: var(--vert);
+        }
+
+        .hero p {
+            color: var(--gris);
+            font-size: 13px;
+            line-height: 1.9;
+            max-width: 520px;
+        }
+
+        /* BOUTIQUE */
+
+        .boutique {
+            width: 86%;
+            max-width: 1400px;
+            margin: 65px auto 90px;
+        }
+
+        .titre-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .petit-titre {
+            color: var(--vert);
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .titre-section h2 {
+            font-size: 29px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .nombre-produits {
+            color: var(--gris);
+            font-size: 11px;
+        }
+
+        /* RECHERCHE ET FILTRES */
+
+        .outils {
+            display: grid;
+            grid-template-columns: 1fr 190px 190px;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .recherche {
+            position: relative;
+        }
+
+        .recherche input,
+        .filtre-select {
+            width: 100%;
+            height: 49px;
+            background: var(--panneau);
+            border: 1px solid var(--bordure);
+            border-radius: 5px;
+            color: white;
+            padding: 0 16px;
+            outline: none;
+            font-size: 11px;
+        }
+
+        .recherche input:focus,
+        .filtre-select:focus {
+            border-color: var(--vert);
+        }
+
+        .recherche input::placeholder {
+            color: #778078;
+        }
+
+        .filtre-select option {
+            background: #131813;
+            color: white;
+        }
+
+        /* FILTRES RAPIDES */
+
+        .filtres-rapides {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin-bottom: 22px;
+        }
+
+        .filtre-btn {
+            background: transparent;
+            color: #c2c9c3;
+            border: 1px solid var(--bordure);
+            padding: 10px 17px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .filtre-btn:hover,
+        .filtre-btn.active {
+            background: var(--vert);
+            border-color: var(--vert);
+            color: var(--noir);
+        }
+
+        /* GRILLE PRODUITS */
+
+        .grille-produits {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .carte-produit {
+            background: var(--panneau);
+            border: 1px solid var(--bordure);
+            border-radius: 7px;
+            overflow: hidden;
+            transition: .25s;
+            min-width: 0;
+        }
+
+        .carte-produit:hover {
+            transform: translateY(-5px);
+            border-color: rgba(183,255,53,.55);
+        }
+
+        .photo-produit {
+            height: 290px;
+            background: #171d18;
+            position: relative;
+            overflow: hidden;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-produit img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform .35s;
+        }
+
+        .carte-produit:hover .photo-produit img {
+            transform: scale(1.05);
+        }
+
+        .etiquette {
+            position: absolute;
+            top: 13px;
+            left: 13px;
+            background: var(--vert);
+            color: var(--noir);
+            font-size: 8px;
+            font-weight: 900;
+            padding: 7px 10px;
+            border-radius: 3px;
+            text-transform: uppercase;
+        }
+
+        .infos-produit {
+            padding: 18px;
+        }
+
+        .nom-club {
+            color: var(--vert);
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            margin-bottom: 9px;
+        }
+
+        .nom-maillot {
+            font-size: 15px;
+            font-weight: 900;
+            line-height: 1.4;
+            min-height: 42px;
+            margin-bottom: 8px;
+        }
+
+        .details-maillot {
+            color: var(--gris);
+            font-size: 9px;
+            margin-bottom: 16px;
+        }
+
+        .bas-produit {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .prix {
+            color: var(--vert);
+            font-size: 21px;
+            font-weight: 900;
+        }
+
+        .prix small {
+            color: var(--gris);
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        .saison {
+            color: var(--gris);
+            font-size: 9px;
+        }
+
+        .bouton-consulter {
+            display: block;
+            width: 100%;
+            padding: 14px 8px;
+            background: var(--vert);
+            color: var(--noir);
+            border-radius: 4px;
+            text-align: center;
+            font-size: 9px;
+            font-weight: 900;
+            transition: .2s;
+        }
+
+        .bouton-consulter:hover {
+            background: #d1ff86;
+        }
+
+        /* AUCUN PRODUIT */
+
+        .aucun-produit {
+            display: none;
+            padding: 65px 20px;
+            text-align: center;
+            background: var(--panneau);
+            border: 1px solid var(--bordure);
+            border-radius: 7px;
+        }
+
+        .aucun-produit h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .aucun-produit p {
+            color: var(--gris);
+            font-size: 11px;
+            line-height: 1.8;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: var(--fond);
+            border-top: 1px solid var(--bordure);
+            padding: 40px 7%;
+            text-align: center;
+        }
+
+        footer .logo {
+            margin-bottom: 12px;
+        }
+
+        footer p {
+            color: var(--gris);
+            font-size: 10px;
+            line-height: 1.9;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 1100px) {
+            .grille-produits {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media(max-width: 800px) {
+            .grille-produits {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .outils {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .recherche {
+                grid-column: 1 / -1;
+            }
+
+            .photo-produit {
+                height: 260px;
+            }
+        }
+
+        @media(max-width: 600px) {
+            header {
+                height: 65px;
+                padding: 0 17px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .navigation {
+                gap: 12px;
+            }
+
+            .navigation a {
+                font-size: 9px;
+            }
+
+            .navigation a:first-child {
+                display: none;
+            }
+
+            .panier-lien {
+                padding: 10px 11px;
+            }
+
+            .hero {
+                min-height: 280px;
+                padding: 55px 6%;
+            }
+
+            .hero h1 {
+                letter-spacing: -1.5px;
+            }
+
+            .hero p {
+                font-size: 11px;
+            }
+
+            .boutique {
+                width: 90%;
+                margin-top: 45px;
+            }
+
+            .titre-section {
+                align-items: start;
+                flex-direction: column;
+            }
+
+            .titre-section h2 {
+                font-size: 24px;
+            }
+
+            .outils {
+                grid-template-columns: 1fr;
+            }
+
+            .recherche {
+                grid-column: auto;
+            }
+
+            .grille-produits {
+                gap: 12px;
+            }
+
+            .photo-produit {
+                height: 195px;
+                padding: 9px;
+            }
+
+            .infos-produit {
+                padding: 12px;
+            }
+
+            .nom-maillot {
+                font-size: 12px;
+            }
+
+            .prix {
+                font-size: 17px;
+            }
+
+            .bouton-consulter {
+                font-size: 8px;
+                padding: 12px 5px;
+            }
+        }
+
+        @media(max-width: 360px) {
+            .grille-produits {
+                grid-template-columns: 1fr;
+            }
+
+            .photo-produit {
+                height: 280px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header>
+        <a href="/" class="logo">
+            MAILLOT<span>FLEX.</span>
+        </a>
+
+        <nav class="navigation">
+            <a href="/">ACCUEIL</a>
+            <a href="{{ url_for('boutique') }}">BOUTIQUE</a>
+            <a href="{{ url_for('panier') }}" class="panier-lien">
+                MON PANIER
+            </a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+
+    <section class="hero">
+        <div class="hero-contenu">
+
+            <div class="hero-label">
+                COLLECTION FOOTBALL 2026 / 2027
+            </div>
+
+            <h1>
+                TON CLUB.<br>
+                TA PASSION.<br>
+                <span>TON MAILLOT.</span>
+            </h1>
+
+            <p>
+                Découvre notre sélection de maillots de clubs et
+                de sélections nationales. Choisis ton équipe,
+                consulte son maillot et passe ta commande.
+            </p>
+
+        </div>
+    </section>
+
+    <!-- BOUTIQUE -->
+
+    <main class="boutique">
+
+        <div class="titre-section">
+
+            <div>
+                <div class="petit-titre">
+                    TROUVE TON MAILLOT
+                </div>
+
+                <h2>NOTRE COLLECTION</h2>
+            </div>
+
+            <div class="nombre-produits">
+                <span id="compteur-produits">{{ produits|length }}</span>
+                MAI(L)LOTS DISPONIBLES
+            </div>
+
+        </div>
+
+        <!-- RECHERCHE ET TRI -->
+
+        <div class="outils">
+
+            <div class="recherche">
+                <input
+                    type="search"
+                    id="recherche"
+                    placeholder="Rechercher un club ou un pays..."
+                    autocomplete="off"
+                >
+            </div>
+
+            <select id="filtre-ligue" class="filtre-select">
+                <option value="toutes">Tous les championnats</option>
+                <option value="angleterre">Angleterre</option>
+                <option value="espagne">Espagne</option>
+                <option value="france">France</option>
+                <option value="italie">Italie</option>
+                <option value="allemagne">Allemagne</option>
+                <option value="selection">Sélections nationales</option>
+                <option value="autres">Autres clubs</option>
+            </select>
+
+            <select id="tri-prix" class="filtre-select">
+                <option value="defaut">Trier les maillots</option>
+                <option value="croissant">Prix croissant</option>
+                <option value="decroissant">Prix décroissant</option>
+                <option value="nom">Ordre alphabétique</option>
+            </select>
+
+        </div>
+
+        <!-- FILTRES RAPIDES -->
+
+        <div class="filtres-rapides">
+
+            <button class="filtre-btn active" data-categorie="tous">
+                TOUS LES MAILLOTS
+            </button>
+
+            <button class="filtre-btn" data-categorie="club">
+                CLUBS
+            </button>
+
+            <button class="filtre-btn" data-categorie="selection">
+                SÉLECTIONS
+            </button>
+
+            <button class="filtre-btn" data-categorie="nouveau">
+                NOUVEAUTÉS
+            </button>
+
+        </div>
+
+        <!-- GRILLE DES PRODUITS -->
+
+        <div class="grille-produits" id="grille-produits">
+
+            {% for produit in produits %}
+
+                {% set image_produit = produit.image if produit.image and produit.image.startswith('http') else url_for('static', filename='uploads/' ~ produit.image) %}
+
+                <article
+                    class="carte-produit"
+                    data-id="{{ produit.id }}"
+                    data-nom="{{ produit.nom|lower }}"
+                    data-club="{{ produit.club|lower }}"
+                    data-categorie="{{ produit.categorie|lower }}"
+                    data-type="{{ produit.type_maillot|lower }}"
+                    data-prix="{{ produit.prix }}"
+                    data-ligue=""
+                >
+
+                    <a href="{{ url_for('detail_produit', produit_id=produit.id) }}">
+
+                        <div class="photo-produit">
+
+                            {% if produit.categorie|lower == 'nouveau' %}
+                                <span class="etiquette">NOUVEAU</span>
+                            {% elif produit.categorie|lower == 'selection' %}
+                                <span class="etiquette">SÉLECTION</span>
+                            {% endif %}
+
+                            <img
+                                src="{{ image_produit }}"
+                                alt="Maillot {{ produit.club }}"
+                                loading="lazy"
+                                onerror="this.style.opacity='0.15'"
+                            >
+
+                        </div>
+
+                    </a>
+
+                    <div class="infos-produit">
+
+                        <div class="nom-club">
+                            {{ produit.club }}
+                        </div>
+
+                        <h3 class="nom-maillot">
+                            {{ produit.nom }}
+                        </h3>
+
+                        <div class="details-maillot">
+                            {{ produit.type_maillot }}
+                            {% if produit.saison %}
+                                · {{ produit.saison }}
+                            {% endif %}
+                        </div>
+
+                        <div class="bas-produit">
+
+                            <div class="prix">
+                                ${{ produit.prix }}
+                                <small>USD</small>
+                            </div>
+
+                            <div class="saison">
+                                Player Version
+                            </div>
+
+                        </div>
+
+                        <a
+                            href="{{ url_for('detail_produit', produit_id=produit.id) }}"
+                            class="bouton-consulter"
+                        >
+                            CONSULTER LE MAILLOT →
+                        </a>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+        <!-- AUCUN PRODUIT -->
+
+        <div class="aucun-produit" id="aucun-produit">
+
+            <h3>AUCUN MAILLOT TROUVÉ</h3>
+
+            <p>
+                Aucun maillot ne correspond à ta recherche.
+                Essaie un autre nom de club ou de pays.
+            </p>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="logo">
+            MAILLOT<span>FLEX.</span>
+        </div>
+
+        <p>
+            TON CLUB, TA PASSION, TON MAILLOT.
+            <br>
+            ©️ 2026 MAILLOT FLEX. Tous droits réservés.
+        </p>
+
+    </footer>
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        const recherche = document.getElementById("recherche");
+        const filtreLigue = document.getElementById("filtre-ligue");
+        const triPrix = document.getElementById("tri-prix");
+
+        const grille = document.getElementById("grille-produits");
+        const aucunProduit = document.getElementById("aucun-produit");
+        const compteur = document.getElementById("compteur-produits");
+
+        const cartes = Array.from(
+            document.querySelectorAll(".carte-produit")
+        );
+
+        let categorieActive = "tous";
+
+        // Identifier le championnat d'un club
+
+        function identifierLigue(club) {
+
+            const nom = club.toLowerCase();
+
+            const angleterre = [
+                "arsenal",
+                "liverpool",
+                "chelsea",
+                "manchester city",
+                "manchester united",
+                "tottenham",
+                "newcastle",
+                "aston villa",
+                "west ham",
+                "everton"
+            ];
+
+            const espagne = [
+                "real madrid",
+                "barcelona",
+                "barcelone",
+                "atletico madrid",
+                "atlético madrid",
+                "sevilla",
+                "valencia",
+                "villarreal"
+            ];
+
+            const france = [
+                "paris saint",
+                "psg",
+                "marseille",
+                "lyon",
+                "monaco",
+                "lille"
+            ];
+
+            const italie = [
+                "inter",
+                "ac milan",
+                "juventus",
+                "napoli",
+                "roma",
+                "lazio",
+                "atalanta"
+            ];
+
+            const allemagne = [
+                "bayern",
+                "borussia dortmund",
+                "leverkusen",
+                "leipzig",
+                "frankfurt"
+            ];
+
+            if (angleterre.some(n => nom.includes(n))) return "angleterre";
+            if (espagne.some(n => nom.includes(n))) return "espagne";
+            if (france.some(n => nom.includes(n))) return "france";
+            if (italie.some(n => nom.includes(n))) return "italie";
+            if (allemagne.some(n => nom.includes(n))) return "allemagne";
+
+            return "autres";
+        }
+
+        // Préparer les championnats des produits
+
+        cartes.forEach(carte => {
+
+            const categorie = carte.dataset.categorie;
+            const club = carte.dataset.club;
+
+            if (categorie.includes("selection") || categorie.includes("sélection")) {
+                carte.dataset.ligue = "selection";
+            } else {
+                carte.dataset.ligue = identifierLigue(club);
+            }
+
+        });
+
+        // Appliquer les filtres
+
+        function filtrerProduits() {
+
+            const texte = recherche.value.toLowerCase().trim();
+            const ligue = filtreLigue.value;
+
+            let visibles = [];
+
+            cartes.forEach(carte => {
+
+                const nom = carte.dataset.nom;
+                const club = carte.dataset.club;
+                const categorie = carte.dataset.categorie;
+                const type = carte.dataset.type;
+                const ligueProduit = carte.dataset.ligue;
+
+                const correspondRecherche =
+                    nom.includes(texte) ||
+                    club.includes(texte) ||
+                    type.includes(texte);
+
+                const correspondCategorie =
+                    categorieActive === "tous" ||
+                    categorie === categorieActive;
+
+                const correspondLigue =
+                    ligue === "toutes" ||
+                    ligueProduit === ligue;
+
+                const afficher =
+                    correspondRecherche &&
+                    correspondCategorie &&
+                    correspondLigue;
+
+                carte.style.display = afficher ? "" : "none";
+
+                if (afficher) {
+                    visibles.push(carte);
+                }
+
+            });
+
+            // Trier les produits visibles
+
+            const ordre = triPrix.value;
+
+            if (ordre === "croissant") {
+                visibles.sort((a, b) =>
+                    Number(a.dataset.prix) - Number(b.dataset.prix)
+                );
+            }
+
+            if (ordre === "decroissant") {
+                visibles.sort((a, b) =>
+                    Number(b.dataset.prix) - Number(a.dataset.prix)
+                );
+            }
+
+            if (ordre === "nom") {
+                visibles.sort((a, b) =>
+                    a.dataset.nom.localeCompare(b.dataset.nom)
+                );
+            }
+
+            visibles.forEach(carte => grille.appendChild(carte));
+
+            compteur.textContent = visibles.length;
+
+            aucunProduit.style.display =
+                visibles.length === 0 ? "block" : "none";
+
+        }
+
+        // Recherche
+
+        recherche.addEventListener("input", filtrerProduits);
+
+        // Filtre championnat
+
+        filtreLigue.addEventListener("change", filtrerProduits);
+
+        // Tri
+
+        triPrix.addEventListener("change", filtrerProduits);
+
+        // Catégories
+
+        document.querySelectorAll(".filtre-btn").forEach(bouton => {
+
+            bouton.addEventListener("click", () => {
+
+                document.querySelectorAll(".filtre-btn").forEach(element => {
+                    element.classList.remove("active");
+                });
+
+                bouton.classList.add("active");
+
+                categorieActive = bouton.dataset.categorie;
+
+                filtrerProduits();
+
+            });
+
+        });
+
+        // Initialisation
+
+        filtrerProduits();
+
+    </script>
+
+</body>
+</html>

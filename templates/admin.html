@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Administration | MAILLOT FLEX</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --noir: #080a09;
+            --fond: #0d100e;
+            --panneau: #121713;
+            --vert: #b7ff35;
+            --blanc: #ffffff;
+            --gris: #9ba49d;
+            --bordure: rgba(255,255,255,.09);
+            --rouge: #ff6262;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--noir);
+            color: var(--blanc);
+        }
+
+        button, input, select, textarea {
+            font-family: inherit;
+        }
+
+        .entete {
+            height: 75px;
+            padding: 0 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--fond);
+            border-bottom: 1px solid var(--bordure);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: var(--vert);
+        }
+
+        .entete-droite {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .entete a {
+            color: var(--vert);
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .conteneur {
+            display: grid;
+            grid-template-columns: 245px minmax(0, 1fr);
+            min-height: calc(100vh - 75px);
+        }
+
+        aside {
+            background: var(--fond);
+            border-right: 1px solid var(--bordure);
+            padding: 28px 18px;
+        }
+
+        .profil {
+            padding: 18px 12px 25px;
+            border-bottom: 1px solid var(--bordure);
+            margin-bottom: 24px;
+        }
+
+        .profil small {
+            color: var(--vert);
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+        }
+
+        .profil h3 {
+            font-size: 14px;
+            margin-top: 9px;
+        }
+
+        .profil p {
+            color: var(--gris);
+            font-size: 10px;
+            margin-top: 6px;
+        }
+
+        .menu-titre {
+            color: #667069;
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            margin: 22px 12px 10px;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #c4ccc6;
+            padding: 13px 12px;
+            margin-bottom: 5px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 700;
+            transition: .2s;
+        }
+
+        .menu a:hover,
+        .menu a.actif {
+            background: rgba(183,255,53,.10);
+            color: var(--vert);
+        }
+
+        main {
+            padding: 35px;
+            width: 100%;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .titre-page {
+            margin-bottom: 28px;
+        }
+
+        .titre-page small {
+            color: var(--vert);
+            font-weight: 900;
+            font-size: 9px;
+            letter-spacing: 2px;
+        }
+
+        .titre-page h1 {
+            font-size: 30px;
+            margin: 10px 0;
+            letter-spacing: -1px;
+        }
+
+        .titre-page p {
+            color: var(--gris);
+            font-size: 12px;
+        }
+
+        .statistiques {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .statistique {
+            background: var(--panneau);
+            border: 1px solid var(--bordure);
+            padding: 22px;
+            border-radius: 8px;
+        }
+
+        .statistique small {
+            color: var(--gris);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .statistique h2 {
+            color: var(--vert);
+            font-size: 30px;
+            margin-top: 10px;
+        }
+
+        .bloc {
+            background: var(--panneau);
+            border: 1px solid var(--bordure);
+            border-radius: 9px;
+            padding: 26px;
+            margin-bottom: 24px;
+            scroll-margin-top: 95px;
+        }
+
+        .bloc-entete {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .bloc-titre {
+            font-size: 17px;
+            font-weight: 900;
+        }
+
+        .bloc-description {
+            color: var(--gris);
+            font-size: 11px;
+            margin-top: 7px;
+            line-height: 1.7;
+        }
+
+        .formulaire {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 17px;
+        }
+
+        .champ {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            min-width: 0;
+        }
+
+        .champ.complet {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            color: #dce2dc;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            background: #090d0a;
+            color: white;
+            border: 1px solid var(--bordure);
+            border-radius: 5px;
+            padding: 13px;
+            font-size: 11px;
+            outline: none;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--vert);
+        }
+
+        input[type="file"] {
+            padding: 11px;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: var(--vert);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 10px;
+            margin-right: 10px;
+            font-weight: 800;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .aide {
+            color: #778078;
+            font-size: 9px;
+            line-height: 1.6;
+        }
+
+        .bouton {
+            background: var(--vert);
+            color: #080a09;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 5px;
+            font-size: 10px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .bouton:hover {
+            background: #d0ff80;
+            transform: translateY(-1px);
+        }
+
+        .bouton-secondaire {
+            background: #252d27;
+            color: white;
+            border: 1px solid var(--bordure);
+            padding: 11px 14px;
+            border-radius: 5px;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .table-conteneur {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 11px;
+            border-bottom: 1px solid var(--bordure);
+            font-size: 10px;
+            vertical-align: middle;
+        }
+
+        th {
+            color: var(--vert);
+            font-size: 9px;
+            letter-spacing: .5px;
+            font-weight: 900;
+        }
+
+        td {
+            color: #d4dad5;
+        }
+
+        .photo-table {
+            width: 55px;
+            height: 60px;
+            object-fit: contain;
+            background: #202720;
+            border-radius: 5px;
+        }
+
+        .vide {
+            color: var(--gris);
+            text-align: center;
+            padding: 30px;
+        }
+
+        .message {
+            padding: 13px 15px;
+            border-radius: 5px;
+            margin-bottom: 18px;
+            background: rgba(183,255,53,.09);
+            border: 1px solid rgba(183,255,53,.15);
+            color: var(--vert);
+            font-size: 11px;
+        }
+
+        .supprimer {
+            background: rgba(255,80,80,.12);
+            color: var(--rouge);
+            border: 1px solid rgba(255,80,80,.18);
+            padding: 9px 11px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        .statut {
+            color: var(--vert);
+            font-weight: 800;
+        }
+
+        .articles-commande {
+            line-height: 2;
+            min-width: 140px;
+        }
+
+        .date-livraison {
+            min-width: 140px;
+            margin-bottom: 9px;
+        }
+
+        .bouton-whatsapp {
+            background: #25D366;
+            color: #06150b;
+            border: none;
+            padding: 10px 12px;
+            border-radius: 5px;
+            font-size: 9px;
+            font-weight: 900;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .bouton-whatsapp:hover {
+            background: #1ebe5d;
+        }
+
+        .editeur {
+            margin-top: 12px;
+            padding: 17px;
+            background: #0b100c;
+            border: 1px solid var(--bordure);
+            border-radius: 7px;
+        }
+
+        .editeur summary {
+            color: var(--vert);
+            font-size: 10px;
+            font-weight: 900;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .galerie-admin {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .photo-admin {
+            width: 75px;
+            height: 85px;
+            object-fit: contain;
+            background: #202720;
+            border-radius: 5px;
+            padding: 4px;
+        }
+
+        .photo-mini {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .audio-carte {
+            background: #0b100c;
+            border: 1px solid var(--bordure);
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 12px;
+        }
+
+        .audio-carte strong {
+            font-size: 11px;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 12px;
+            height: 35px;
+        }
+
+        .badge-actif {
+            color: var(--vert);
+            font-weight: 900;
+        }
+
+        .badge-inactif {
+            color: var(--rouge);
+            font-weight: 900;
+        }
+
+        .separateur {
+            height: 1px;
+            background: var(--bordure);
+            margin: 23px 0;
+        }
+
+        @media(max-width: 900px) {
+            .conteneur {
+                grid-template-columns: 1fr;
+            }
+
+            aside {
+                border-right: none;
+                border-bottom: 1px solid var(--bordure);
+                padding: 12px;
+            }
+
+            .profil {
+                display: none;
+            }
+
+            .menu-titre {
+                display: none;
+            }
+
+            .menu {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .menu a {
+                padding: 10px;
+                margin: 0;
+                font-size: 10px;
+            }
+
+            main {
+                padding: 24px 17px;
+            }
+        }
+
+        @media(max-width: 600px) {
+            .entete {
+                height: 65px;
+                padding: 0 16px;
+            }
+
+            .logo {
+                font-size: 19px;
+            }
+
+            .entete-droite {
+                gap: 10px;
+            }
+
+            .entete a {
+                font-size: 9px;
+            }
+
+            .titre-page h1 {
+                font-size: 25px;
+            }
+
+            .statistiques {
+                grid-template-columns: 1fr 1fr;
+                gap: 9px;
+            }
+
+            .statistique {
+                padding: 16px;
+            }
+
+            .statistique:last-child {
+                grid-column: 1 / -1;
+            }
+
+            .statistique h2 {
+                font-size: 25px;
+            }
+
+            .bloc {
+                padding: 17px;
+            }
+
+            .formulaire {
+                grid-template-columns: 1fr;
+            }
+
+            .champ.complet {
+                grid-column: auto;
+            }
+
+            .menu a {
+                font-size: 9px;
+                padding: 9px 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="entete">
+
+    <div class="logo">
+        MAILLOT<span>FLEX.</span>
+    </div>
+
+    <div class="entete-droite">
+        <a href="/">VOIR LA BOUTIQUE ↗</a>
+        <a href="{{ url_for('admin_deconnexion') }}">DÉCONNEXION</a>
+    </div>
+
+</header>
+
+
+<div class="conteneur">
+
+    <aside>
+
+        <div class="profil">
+            <small>ESPACE ADMINISTRATEUR</small>
+            <h3>Gestion de la boutique</h3>
+            <p>Bienvenue dans ton espace de travail.</p>
+        </div>
+
+        <div class="menu-titre">MENU PRINCIPAL</div>
+
+        <nav class="menu">
+
+            <a href="#accueil" class="actif">▦ Tableau de bord</a>
+            <a href="#ajouter">＋ Ajouter un maillot</a>
+            <a href="#produits">▣ Mes maillots</a>
+            <a href="#musiques">♫ Gestion musicale</a>
+            <a href="#commandes">▤ Commandes</a>
+            <a href="/">← Voir la boutique</a>
+
+        </nav>
+
+    </aside>
+
+
+    <main id="accueil">
+
+        <div class="titre-page">
+
+            <small>MAILLOT FLEX / ADMINISTRATION</small>
+
+            <h1>Tableau de bord</h1>
+
+            <p>
+                Contrôle et gère tous les éléments de ta boutique.
+            </p>
+
+        </div>
+
+
+        <!-- MESSAGES -->
+
+        {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    <div class="message">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <!-- STATISTIQUES -->
+
+        <div class="statistiques">
+
+            <div class="statistique">
+
+                <small>MAILLOTS PUBLIÉS</small>
+
+                <h2>{{ produits|length }}</h2>
+
+            </div>
+
+
+            <div class="statistique">
+
+                <small>COMMANDES REÇUES</small>
+
+                <h2>{{ nombre_commandes|default(0) }}</h2>
+
+            </div>
+
+
+            <div class="statistique">
+
+                <small>SAISON EN COURS</small>
+
+                <h2>26/27</h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- AJOUTER UN MAILLOT -->
+
+        <section class="bloc" id="ajouter">
+
+            <div class="bloc-entete">
+
+                <div>
+
+                    <h2 class="bloc-titre">
+                        ＋ Publier un nouveau maillot
+                    </h2>
+
+                    <p class="bloc-description">
+                        Ajoute un produit avec ses photos et ses informations.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                class="formulaire"
+                action="{{ url_for('ajouter_produit') }}"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                <div class="champ">
+
+                    <label>Nom du maillot</label>
+
+                    <input
+                        type="text"
+                        name="nom"
+                        placeholder="Ex : Maillot domicile Real Madrid"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="champ">
+
+                    <label>Nom du club ou de la sélection</label>
+
+                    <input
+                        type="text"
+                        name="club"
+                        placeholder="Ex : Real Madrid"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="champ">
+
+                    <label>Catégorie</label>
+
+                    <select name="categorie" required>
+
+                        <option value="">Choisir une catégorie</option>
+                        <option value="club">Club</option>
+                        <option value="selection">Sélection nationale</option>
+                        <option value="nouveau">Nouveauté</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="champ">
+
+                    <label>Type de maillot</label>
+
+                    <select name="type_maillot" required>
+
+                        <option value="">Choisir le modèle</option>
+                        <option value="Domicile">Domicile</option>
+                        <option value="Extérieur">Extérieur</option>
+                        <option value="Troisième maillot">Troisième maillot</option>
+                        <option value="Spécial">Édition spéciale</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="champ">
+
+                    <label>Saison</label>
+
+                    <input
+                        type="text"
+                        name="saison"
+                        value="2026/2027"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="champ">
+
+                    <label>Prix en dollars ($)</label>
+
+                    <input
+                        type="number"
+                        name="prix"
+                        value="12"
+                        min="1"
+                        step="0.01"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="champ">
+
+                    <label>Photo principale</label>
+
+                    <input
+                        type="file"
+                        name="image"
+                        accept=".jpg,.jpeg,.png,.webp"
+                        required
+                        onchange="apercuPhoto(this, 'apercu-principal')"
+                    >
+
+                    <span class="aide">
+                        Cette photo sera affichée dans la boutique.
+                    </span>
+
+                    <img
+                        id="apercu-principal"
+                        class="photo-admin"
+                        style="display:none"
+                        alt="Aperçu du maillot"
+                    >
+
+                </div>
+
+
+                <div class="champ">
+
+                    <label>Photos supplémentaires</label>
+
+                    <input
+                        type="file"
+                        name="images_secondaires"
+                        accept=".jpg,.jpeg,.png,.webp"
+                        multiple
+                        onchange="afficherGalerie(this)"
+                    >
+
+                    <span class="aide">
+                        Tu peux sélectionner plusieurs photos : arrière,
+                        détails ou personne portant le maillot.
+                    </span>
+
+                    <div id="apercu-galerie" class="galerie-admin"></div>
+
+                </div>
+
+
+                <div class="champ">
+
+                    <label>Tailles disponibles</label>
+
+                    <select name="tailles" required>
+
+                        <option value="XS,S,M,L,XL,XXL">XS à XXL</option>
+                        <option value="S,M,L,XL">S à XL</option>
+                        <option value="M,L,XL">M à XL</option>
+                        <option value="S,M,L">S à L</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="champ complet">
+
+                    <label>Description du maillot</label>
+
+                    <textarea
+                        name="description"
+                        placeholder="Décris les caractéristiques du maillot..."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="champ complet">
+
+                    <button type="submit" class="bouton">
+                        PUBLIER LE MAILLOT →
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- MES MAILLOTS -->
+
+        <section class="bloc" id="produits">
+
+            <div class="bloc-entete">
+
+                <div>
+
+                    <h2 class="bloc-titre">
+                        Mes maillots publiés
+                    </h2>
+
+                    <p class="bloc-description">
+                        Consulte, modifie ou supprime tes produits.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-conteneur">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>PHOTO</th>
+                            <th>MAILLOT</th>
+                            <th>CLUB</th>
+                            <th>TYPE</th>
+                            <th>SAISON</th>
+                            <th>PRIX</th>
+                            <th>ACTION</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for produit in produits %}
+
+                        <tr>
+
+                            <td>
+
+                                <img
+                                    class="photo-table"
+                                    src="{{ url_for('static', filename='uploads/' ~ produit.image) }}"
+                                    alt="{{ produit.nom }}"
+                                >
+
+                            </td>
+
+
+                            <td>
+                                <strong>{{ produit.nom }}</strong>
+                            </td>
+
+
+                            <td>{{ produit.club }}</td>
+
+
+                            <td>{{ produit.type_maillot }}</td>
+
+
+                            <td>{{ produit.saison }}</td>
+
+
+                            <td>
+                                <strong>${{ produit.prix }}</strong>
+                            </td>
+
+
+                            <td>
+
+                                <form
+                                    action="{{ url_for('supprimer_produit', produit_id=produit.id) }}"
+                                    method="POST"
+                                    onsubmit="return confirm('Supprimer définitivement ce maillot ?');"
+                                >
+
+                                    <button
+                                        class="supprimer"
+                                        type="submit"
+                                    >
+                                        SUPPRIMER
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td colspan="7">
+
+                                <details class="editeur">
+
+                                    <summary>
+                                        ✎ MODIFIER CE MAILLOT ET VOIR SA GALERIE
+                                    </summary>
+
+
+                                    <form
+                                        action="{{ url_for('modifier_produit', produit_id=produit.id) }}"
+                                        method="POST"
+                                        enctype="multipart/form-data"
+                                        class="formulaire"
+                                    >
+
+                                        <div class="champ">
+
+                                            <label>Nom du maillot</label>
+
+                                            <input
+                                                type="text"
+                                                name="nom"
+                                                value="{{ produit.nom }}"
+                                                required
+                                            >
+
+                                        </div>
+
+
+                                        <div class="champ">
+
+                                            <label>Club</label>
+
+                                            <input
+                                                type="text"
+                                                name="club"
+                                                value="{{ produit.club }}"
+                                                required
+                                            >
+
+                                        </div>
+
+
+                                        <div class="champ">
+
+                                            <label>Catégorie</label>
+
+                                            <select name="categorie" required>
+
+                                                <option value="club" {% if produit.categorie == 'club' %}selected{% endif %}>
+                                                    Club
+                                                </option>
+
+                                                <option value="selection" {% if produit.categorie == 'selection' %}selected{% endif %}>
+                                                    Sélection nationale
+                                                </option>
+
+                                                <option value="nouveau" {% if produit.categorie == 'nouveau' %}selected{% endif %}>
+                                                    Nouveauté
+                                                </option>
+
+                                            </select>
+
+                                        </div>
+
+
+                                        <div class="champ">
+
+                                            <label>Type de maillot</label>
+
+                                            <select name="type_maillot" required>
+
+                                                <option value="Domicile" {% if produit.type_maillot == 'Domicile' %}selected{% endif %}>
+                                                    Domicile
+                                                </option>
+
+                                                <option value="Extérieur" {% if produit.type_maillot == 'Extérieur' %}selected{% endif %}>
+                                                    Extérieur
+                                                </option>
+
+                                                <option value="Troisième maillot" {% if produit.type_maillot == 'Troisième maillot' %}selected{% endif %}>
+                                                    Troisième maillot
+                                                </option>
+
+                                                <option value="Spécial" {% if produit.type_maillot == 'Spécial' %}selected{% endif %}>
+                                                    Édition spéciale
+                                                </option>
+
+                                            </select>
+
+                                        </div>
+
+
+                                        <div class="champ">
+
+                                            <label>Saison</label>
+
+                                            <input
+                                                type="text"
+                                                name="saison"
+                                                value="{{ produit.saison }}"
+                                                required
+                                            >
+
+                                        </div>
+
+
+                                        <div class="champ">
+
+                                            <label>Prix ($)</label>
+
+                                            <input
+                                                type="number"
+                                                name="prix"
+                                                value="{{ produit.prix }}"
+                                                min="1"
+                                                step="0.01"
+                                                required
+                                            >
+
+                                        </div>
+
+
+                                        <div class="champ">
+
+                                            <label>Tailles</label>
+
+                                            <input
+                                                type="text"
+                                                name="tailles"
+                                                value="{{ produit.tailles }}"
+                                                placeholder="XS,S,M,L,XL,XXL"
+                                            >
+
+                                        </div>
+
+
+                                        <div class="champ">
+
+                                            <label>Remplacer la photo principale</label>
+
+                                            <input
+                                                type="file"
+                                                name="image"
+                                                accept=".jpg,.jpeg,.png,.webp"
+                                            >
+
+                                        </div>
+
+
+                                        <div class="champ complet">
+
+                                            <label>Description</label>
+
+                                            <textarea name="description">{{ produit.description or '' }}</textarea>
+
+                                        </div>
+
+
+                                        <div class="champ complet">
+
+                                            <button class="bouton" type="submit">
+                                                ENREGISTRER LES MODIFICATIONS
+                                            </button>
+
+                                        </div>
+
+                                    </form>
+
+
+                                    <div class="separateur"></div>
+
+
+                                    <h4 style="font-size:11px">
+                                        PHOTOS SUPPLÉMENTAIRES
+                                    </h4>
+
+
+                                    <div class="galerie-admin">
+
+                                        {% for photo in produit.photos %}
+
+                                        <div class="photo-mini">
+
+                                            <img
+                                                class="photo-admin"
+                                                src="{{ url_for('static', filename='uploads/' ~ photo.image) }}"
+                                                alt="Photo supplémentaire"
+                                            >
+
+                                            <form
+                                                action="{{ url_for('supprimer_photo', photo_id=photo.id) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('Supprimer cette photo ?');"
+                                            >
+
+                                                <button class="supprimer" type="submit">
+                                                    RETIRER
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+                                        {% else %}
+
+                                        <p class="aide">
+                                            Aucune photo supplémentaire enregistrée.
+                                        </p>
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                </details>
+
+                            </td>
+
+                        </tr>
+
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="7" class="vide">
+                                Aucun maillot publié pour le moment.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- GESTION MUSIQUE -->
+
+        <section class="bloc" id="musiques">
+
+            <div class="bloc-entete">
+
+                <div>
+
+                    <h2 class="bloc-titre">
+                        ♫ Gestion musicale
+                    </h2>
+
+                    <p class="bloc-description">
+                        Ajoute les musiques que tu souhaites utiliser dans ta boutique.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                action="{{ url_for('ajouter_musique') }}"
+                method="POST"
+                enctype="multipart/form-data"
+                class="formulaire"
+            >
+
+                <div class="champ">
+
+                    <label>Nom de la musique</label>
+
+                    <input
+                        type="text"
+                        name="nom"
+                        placeholder="Ex : Ambiance football"
+                    >
+
+                </div>
+
+
+                <div class="champ">
+
+                    <label>Fichier audio</label>
+
+                    <input
+                        type="file"
+                        name="musique"
+                        accept=".mp3,.wav,.ogg,audio/mpeg,audio/wav,audio/ogg"
+                        required
+                    >
+
+                    <span class="aide">
+                        Formats acceptés : MP3, WAV et OGG.
+                    </span>
+
+                </div>
+
+
+                <div class="champ complet">
+
+                    <button type="submit" class="bouton">
+                        AJOUTER LA MUSIQUE →
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <div class="separateur"></div>
+
+
+            <h3 style="font-size:13px;margin-bottom:15px">
+                MES FICHIERS AUDIO
+            </h3>
+
+
+            {% for musique in musiques %}
+
+            <div class="audio-carte">
+
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+
+                    <div>
+
+                        <strong>{{ musique.nom }}</strong>
+
+                        <p class="aide" style="margin-top:6px">
+                            {% if musique.active %}
+                                <span class="badge-actif">● ACTIVE</span>
+                            {% else %}
+                                <span class="badge-inactif">● DÉSACTIVÉE</span>
+                            {% endif %}
+                        </p>
+
+                    </div>
+
+
+                    <div style="display:flex;gap:8px;flex-wrap:wrap">
+
+                        <form
+                            action="{{ url_for('changer_etat_musique', musique_id=musique.id) }}"
+                            method="POST"
+                        >
+
+                            <button class="bouton-secondaire" type="submit">
+                                {% if musique.active %}
+                                    DÉSACTIVER
+                                {% else %}
+                                    ACTIVER
+                                {% endif %}
+                            </button>
+
+                        </form>
+
+
+                        <form
+                            action="{{ url_for('supprimer_musique', musique_id=musique.id) }}"
+                            method="POST"
+                            onsubmit="return confirm('Supprimer cette musique ?');"
+                        >
+
+                            <button class="supprimer" type="submit">
+                                SUPPRIMER
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+
+                <audio controls preload="none">
+
+                    <source
+                        src="{{ url_for('static', filename='uploads/musiques/' ~ musique.fichier) }}"
+                    >
+
+                    Ton navigateur ne supporte pas la lecture audio.
+
+                </audio>
+
+            </div>
+
+            {% else %}
+
+            <p class="vide">
+                Aucune musique ajoutée pour le moment.
+            </p>
+
+            {% endfor %}
+
+        </section>
+
+
+        <!-- COMMANDES -->
+
+        <section class="bloc" id="commandes">
+
+            <div class="bloc-entete">
+
+                <div>
+
+                    <h2 class="bloc-titre">
+                        ▤ Commandes des clients
+                    </h2>
+
+                    <p class="bloc-description">
+                        Consulte les commandes et confirme la livraison par WhatsApp.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-conteneur">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>N°</th>
+                            <th>CLIENT</th>
+                            <th>TÉLÉPHONE</th>
+                            <th>ADRESSE</th>
+                            <th>ARTICLES</th>
+                            <th>TOTAL</th>
+                            <th>STATUT</th>
+                            <th>DATE</th>
+                            <th>LIVRAISON</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for commande in commandes %}
+
+                        <tr>
+
+                            <td>
+                                <strong>#{{ commande.id }}</strong>
+                            </td>
+
+
+                            <td>
+                                {{ commande.nom_client }}
+                            </td>
+
+
+                            <td>
+                                {{ commande.telephone }}
+                            </td>
+
+
+                            <td>
+
+                                {{ commande.commune|default('') }}
+
+                                <br>
+
+                                {{ commande.adresse|default('') }}
+
+                                {% if commande.instructions %}
+
+                                    <br>
+
+                                    <small>
+                                        Instructions : {{ commande.instructions }}
+                                    </small>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td class="articles-commande">
+
+                                {% for article in commande.articles %}
+
+                                    <strong>
+                                        {{ article.name|default(article.nom|default(article.title|default('Maillot'))) }}
+                                    </strong>
+
+                                    <br>
+
+                                    Taille :
+                                    {{ article.size|default(article.taille|default('Non précisée')) }}
+
+                                    <br>
+
+                                    Quantité :
+                                    {{ article.quantity|default(article.quantite|default(1)) }}
+
+                                    <br><br>
+
+                                {% else %}
+
+                                    Détails indisponibles
+
+                                {% endfor %}
+
+                            </td>
+
+
+                            <td>
+                                <strong>${{ commande.total }}</strong>
+                            </td>
+
+
+                            <td class="statut">
+                                {{ commande.statut }}
+                            </td>
+
+
+                            <td>
+                                {{ commande.date_creation }}
+                            </td>
+
+
+                            <td>
+
+                                <label for="date-livraison-{{ commande.id }}">
+                                    Date de livraison
+                                </label>
+
+                                <input
+                                    type="date"
+                                    class="date-livraison"
+                                    id="date-livraison-{{ commande.id }}"
+                                    required
+                                >
+
+                                <button
+                                    type="button"
+                                    class="bouton-whatsapp"
+                                    data-id="{{ commande.id }}"
+                                    data-nom="{{ commande.nom_client|e }}"
+                                    data-telephone="{{ commande.telephone|e }}"
+                                    onclick="confirmerWhatsApp(this)"
+                                >
+                                    CONFIRMER SUR WHATSAPP
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="9" class="vide">
+                                Aucune commande reçue pour le moment.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <footer style="text-align:center;padding:20px;color:#69736b;font-size:9px">
+            MAILLOT FLEX © 2026 — TON CLUB, TA PASSION, TON MAILLOT.
+        </footer>
+
+    </main>
+
+</div>
+
+
+<script>
+
+// ==================================================
+// APERÇU PHOTO PRINCIPALE
+// ==================================================
+
+function apercuPhoto(input, identifiant) {
+
+    const image = document.getElementById(identifiant);
+
+    if (!input.files || !input.files[0]) {
+        image.style.display = "none";
+        return;
+    }
+
+    image.src = URL.createObjectURL(input.files[0]);
+    image.style.display = "block";
+}
+
+
+// ==================================================
+// APERÇU DES PHOTOS SUPPLÉMENTAIRES
+// ==================================================
+
+function afficherGalerie(input) {
+
+    const conteneur = document.getElementById(
+        "apercu-galerie"
+    );
+
+    conteneur.innerHTML = "";
+
+    Array.from(input.files).forEach(fichier => {
+
+        const image = document.createElement("img");
+
+        image.className = "photo-admin";
+        image.alt = "Aperçu de la photo";
+
+        image.src = URL.createObjectURL(fichier);
+
+        conteneur.appendChild(image);
+
+    });
+
+}
+
+
+// ==================================================
+// CONFIRMATION WHATSAPP
+// ==================================================
+
+function confirmerWhatsApp(bouton) {
+
+    const id = bouton.dataset.id;
+    const nom = bouton.dataset.nom;
+    const telephone = bouton.dataset.telephone;
+
+    const champDate = document.getElementById(
+        "date-livraison-" + id
+    );
+
+    const dateChoisie = champDate.value;
+
+    if (!dateChoisie) {
+
+        alert("Choisis d'abord la date de livraison.");
+
+        champDate.focus();
+
+        return;
+    }
+
+    let numero = telephone.replace(/\D/g, "");
+
+    if (numero.startsWith("00")) {
+
+        numero = numero.substring(2);
+
+    } else if (numero.startsWith("0")) {
+
+        numero = "243" + numero.substring(1);
+
+    }
+
+    if (numero.length < 9) {
+
+        alert("Le numéro de téléphone du client semble incorrect.");
+
+        return;
+    }
+
+    const parties = dateChoisie.split("-");
+
+    const dateFormatee =
+        parties[2] + "/" +
+        parties[1] + "/" +
+        parties[0];
+
+    const message =
+        "Bonjour " + nom + " !\n\n" +
+
+        "Votre commande MAILLOT FLEX n°" +
+        id + " est confirmée.\n\n" +
+
+        "Votre livraison est prévue pour le " +
+        dateFormatee + ".\n\n" +
+
+        "Merci pour votre confiance et votre achat chez MAILLOT FLEX !";
+
+    const lien =
+        "https://wa.me/" +
+        numero +
+        "?text=" +
+        encodeURIComponent(message);
+
+    window.open(lien, "_blank");
+
+}
+
+
+// ==================================================
+// MENU ACTIF
+// ==================================================
+
+document.querySelectorAll(".menu a[href^='#']").forEach(lien => {
+
+    lien.addEventListener("click", function() {
+
+        document.querySelectorAll(".menu a").forEach(element => {
+            element.classList.remove("actif");
+        });
+
+        this.classList.add("actif");
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>

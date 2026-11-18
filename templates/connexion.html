@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion administrateur | MAILLOT FLEX</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #080a09;
+            color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .connexion {
+            width: 100%;
+            max-width: 430px;
+            background: #111612;
+            border: 1px solid #303a31;
+            border-radius: 10px;
+            padding: 40px;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 27px;
+            font-weight: 900;
+            margin-bottom: 35px;
+        }
+
+        .logo span {
+            color: #b7ff35;
+        }
+
+        .badge {
+            text-align: center;
+            color: #b7ff35;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            text-align: center;
+            color: #929b94;
+            font-size: 12px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .champ {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            background: #080a09;
+            border: 1px solid #303a31;
+            border-radius: 5px;
+            color: white;
+            font-family: inherit;
+            font-size: 12px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #b7ff35;
+        }
+
+        .bouton {
+            width: 100%;
+            padding: 16px;
+            background: #b7ff35;
+            color: #080a09;
+            border: 0;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        .bouton:hover {
+            background: #a4e82b;
+        }
+
+        .retour {
+            display: block;
+            text-align: center;
+            color: #929b94;
+            text-decoration: none;
+            font-size: 11px;
+            margin-top: 25px;
+        }
+
+        .retour:hover {
+            color: #b7ff35;
+        }
+
+        .message {
+            background: #351b1b;
+            color: #ffaaaa;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 11px;
+            margin-bottom: 20px;
+        }
+
+        @media(max-width: 480px) {
+            .connexion {
+                padding: 28px 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="connexion">
+
+    <div class="logo">MAILLOT<span>FLEX.</span></div>
+
+    <div class="badge">ESPACE PRIVÉ</div>
+
+    <h1>Administration</h1>
+
+    <p class="description">
+        Connecte-toi pour gérer les maillots,
+        les publications et les commandes.
+    </p>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('admin_login') }}">
+
+        <div class="champ">
+            <label>ADRESSE GMAIL</label>
+            <input
+                type="email"
+                name="email"
+                placeholder="Adresse Gmail administrateur"
+                autocomplete="username"
+                required>
+        </div>
+
+        <div class="champ">
+            <label>MOT DE PASSE</label>
+            <input
+                type="password"
+                name="mot_de_passe"
+                placeholder="Ton mot de passe"
+                autocomplete="current-password"
+                required>
+        </div>
+
+        <button type="submit" class="bouton">
+            SE CONNECTER →
+        </button>
+
+    </form>
+
+    <a href="/" class="retour">← Retour à la boutique</a>
+
+</div>
+
+</body>
+</html>

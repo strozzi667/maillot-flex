@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ produit.nom }} | MAILLOT FLEX</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --noir: #080a09;
+            --fond: #0d100e;
+            --panneau: #131813;
+            --vert: #b7ff35;
+            --blanc: #ffffff;
+            --gris: #a1aaa3;
+            --bordure: rgba(255,255,255,.09);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--noir);
+            color: var(--blanc);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        button, input, select {
+            font-family: inherit;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        header {
+            height: 76px;
+            padding: 0 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--fond);
+            border-bottom: 1px solid var(--bordure);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+        }
+
+        .logo span {
+            color: var(--vert);
+        }
+
+        .navigation {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .navigation a {
+            font-size: 10px;
+            font-weight: 800;
+            color: #d2d8d3;
+            transition: .2s;
+        }
+
+        .navigation a:hover {
+            color: var(--vert);
+        }
+
+        .panier-lien {
+            background: var(--vert);
+            color: var(--noir) !important;
+            padding: 12px 17px;
+            border-radius: 4px;
+        }
+
+        .fil-ariane {
+            padding: 27px 7%;
+            color: var(--gris);
+            font-size: 10px;
+        }
+
+        .fil-ariane a:hover {
+            color: var(--vert);
+        }
+
+        .produit-container {
+            width: 86%;
+            max-width: 1250px;
+            margin: 10px auto 90px;
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 65px;
+            align-items: start;
+        }
+
+        .galerie {
+            min-width: 0;
+        }
+
+        .photo-principale {
+            width: 100%;
+            height: 560px;
+            background: #151b16;
+            border: 1px solid var(--bordure);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .photo-principale img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: .3s;
+        }
+
+        .miniatures {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .miniature {
+            flex: 0 0 90px;
+            height: 100px;
+            background: #151b16;
+            border: 1px solid var(--bordure);
+            border-radius: 6px;
+            padding: 5px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .miniature img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .miniature.active {
+            border: 2px solid var(--vert);
+        }
+
+        .informations {
+            padding-top: 15px;
+        }
+
+        .categorie {
+            display: inline-block;
+            color: var(--vert);
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .nom-produit {
+            font-size: 35px;
+            font-weight: 900;
+            line-height: 1.25;
+            letter-spacing: -1.5px;
+            margin-bottom: 13px;
+        }
+
+        .club {
+            font-size: 12px;
+            color: var(--gris);
+            margin-bottom: 25px;
+        }
+
+        .prix {
+            font-size: 33px;
+            font-weight: 900;
+            color: var(--vert);
+        }
+
+        .prix small {
+            font-size: 11px;
+            color: var(--gris);
+            font-weight: 600;
+        }
+
+        .ligne {
+            height: 1px;
+            background: var(--bordure);
+            margin: 25px 0;
+        }
+
+        .description {
+            color: #b8c0b9;
+            font-size: 12px;
+            line-height: 1.9;
+            margin-top: 10px;
+        }
+
+        .caracteristiques {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .caracteristique {
+            background: var(--panneau);
+            border: 1px solid var(--bordure);
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .caracteristique small {
+            display: block;
+            color: var(--gris);
+            font-size: 9px;
+            margin-bottom: 7px;
+        }
+
+        .caracteristique strong {
+            font-size: 11px;
+        }
+
+        .choix-titre {
+            font-size: 11px;
+            font-weight: 900;
+            margin-bottom: 13px;
+        }
+
+        .tailles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        .taille {
+            min-width: 48px;
+            height: 45px;
+            padding: 0 10px;
+            background: #151b16;
+            color: white;
+            border: 1px solid var(--bordure);
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .taille:hover,
+        .taille.active {
+            background: var(--vert);
+            color: var(--noir);
+            border-color: var(--vert);
+        }
+
+        .quantite {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .quantite label {
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .quantite input {
+            width: 75px;
+            height: 43px;
+            padding: 10px;
+            background: #151b16;
+            border: 1px solid var(--bordure);
+            border-radius: 4px;
+            color: white;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .bouton-ajouter {
+            width: 100%;
+            margin-top: 25px;
+            padding: 17px;
+            background: var(--vert);
+            color: var(--noir);
+            border: none;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .bouton-ajouter:hover {
+            background: #d1ff86;
+            transform: translateY(-2px);
+        }
+
+        .message-erreur {
+            color: #ff7777;
+            font-size: 10px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .livraison {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--panneau);
+            border: 1px solid var(--bordure);
+            border-radius: 5px;
+            padding: 16px;
+            margin-top: 17px;
+        }
+
+        .livraison-icone {
+            font-size: 20px;
+        }
+
+        .livraison strong {
+            display: block;
+            font-size: 10px;
+            margin-bottom: 5px;
+        }
+
+        .livraison small {
+            color: var(--gris);
+            font-size: 9px;
+        }
+
+        .garantie {
+            color: var(--gris);
+            font-size: 9px;
+            line-height: 1.8;
+            margin-top: 18px;
+        }
+
+        footer {
+            background: var(--fond);
+            border-top: 1px solid var(--bordure);
+            padding: 35px 7%;
+            text-align: center;
+        }
+
+        footer .logo {
+            margin-bottom: 10px;
+        }
+
+        footer p {
+            color: var(--gris);
+            font-size: 10px;
+            line-height: 1.8;
+        }
+
+        @media(max-width: 900px) {
+            .produit-container {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+
+            .photo-principale {
+                height: 500px;
+            }
+
+            .informations {
+                padding-top: 0;
+            }
+        }
+
+        @media(max-width: 600px) {
+            header {
+                height: 65px;
+                padding: 0 17px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .navigation {
+                gap: 12px;
+            }
+
+            .navigation a {
+                font-size: 9px;
+            }
+
+            .navigation a:first-child {
+                display: none;
+            }
+
+            .panier-lien {
+                padding: 10px 11px;
+            }
+
+            .fil-ariane {
+                padding: 22px 6%;
+                font-size: 9px;
+            }
+
+            .produit-container {
+                width: 90%;
+                margin-top: 0;
+                gap: 27px;
+            }
+
+            .photo-principale {
+                height: 390px;
+                padding: 12px;
+            }
+
+            .miniature {
+                flex-basis: 75px;
+                height: 82px;
+            }
+
+            .nom-produit {
+                font-size: 28px;
+            }
+
+            .prix {
+                font-size: 29px;
+            }
+
+            .caracteristiques {
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <a href="/" class="logo">
+            MAILLOT<span>FLEX.</span>
+        </a>
+
+        <nav class="navigation">
+            <a href="/">ACCUEIL</a>
+
+            <a href="{{ url_for('boutique') }}">
+                BOUTIQUE
+            </a>
+
+            <a href="{{ url_for('panier') }}" class="panier-lien">
+                MON PANIER
+            </a>
+        </nav>
+    </header>
+
+    <!-- FIL D'ARIANE -->
+    <div class="fil-ariane">
+        <a href="/">Accueil</a>
+        /
+        <a href="{{ url_for('boutique') }}">Boutique</a>
+        /
+        <span style="color:var(--vert)">
+            {{ produit.nom }}
+        </span>
+    </div>
+
+    <!-- CONTENU PRODUIT -->
+    <section class="produit-container">
+
+        <!-- GALERIE PHOTOS -->
+        <div class="galerie">
+
+            {% set image_principale = produit.image if produit.image and produit.image.startswith('http') else url_for('static', filename='uploads/' ~ produit.image) %}
+
+            <div class="photo-principale">
+                <img
+                    id="image-principale"
+                    src="{{ image_principale }}"
+                    alt="{{ produit.nom }}"
+                >
+            </div>
+
+            <div class="miniatures">
+
+                <button
+                    type="button"
+                    class="miniature active"
+                    onclick="changerImage(this)"
+                    data-image="{{ image_principale }}"
+                    aria-label="Afficher la photo principale"
+                >
+                    <img
+                        src="{{ image_principale }}"
+                        alt="Photo principale"
+                    >
+                </button>
+
+                {% for photo in photos %}
+
+                    {% set image_photo = photo.image if photo.image and photo.image.startswith('http') else url_for('static', filename='uploads/' ~ photo.image) %}
+
+                    <button
+                        type="button"
+                        class="miniature"
+                        onclick="changerImage(this)"
+                        data-image="{{ image_photo }}"
+                        aria-label="Afficher une autre photo"
+                    >
+                        <img
+                            src="{{ image_photo }}"
+                            alt="Photo supplémentaire du maillot"
+                        >
+                    </button>
+
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <!-- INFORMATIONS PRODUIT -->
+        <div class="informations">
+
+            <span class="categorie">
+                {{ produit.categorie }}
+            </span>
+
+            <h1 class="nom-produit">
+                {{ produit.nom }}
+            </h1>
+
+            <p class="club">
+                CLUB : {{ produit.club }}
+            </p>
+
+            <div class="prix">
+                ${{ produit.prix }}
+                <small> / maillot</small>
+            </div>
+
+            <div class="ligne"></div>
+
+            <h3 class="choix-titre">
+                DESCRIPTION
+            </h3>
+
+            <p class="description">
+                {% if produit.description %}
+                    {{ produit.description }}
+                {% else %}
+                    Découvre ce maillot disponible chez MAILLOT FLEX.
+                    Choisis ta taille et commande dès maintenant.
+                {% endif %}
+            </p>
+
+            <!-- CARACTERISTIQUES -->
+            <div class="caracteristiques">
+
+                <div class="caracteristique">
+                    <small>TYPE DE MAILLOT</small>
+                    <strong>{{ produit.type_maillot }}</strong>
+                </div>
+
+                <div class="caracteristique">
+                    <small>SAISON</small>
+                    <strong>{{ produit.saison }}</strong>
+                </div>
+
+                <div class="caracteristique">
+                    <small>VERSION</small>
+                    <strong>Player Version</strong>
+                </div>
+
+                <div class="caracteristique">
+                    <small>MARQUE</small>
+                    <strong>MAILLOT FLEX</strong>
+                </div>
+
+            </div>
+
+            <div class="ligne"></div>
+
+            <!-- CHOIX DE LA TAILLE -->
+            <h3 class="choix-titre">
+                CHOISIR SA TAILLE
+            </h3>
+
+            <div class="tailles" id="liste-tailles">
+
+                {% for taille in (produit.tailles or 'S,M,L,XL,XXL').split(',') %}
+
+                    {% set taille_propre = taille.strip() %}
+
+                    {% if taille_propre %}
+
+                        <button
+                            type="button"
+                            class="taille"
+                            onclick="selectionnerTaille(this)"
+                            data-taille="{{ taille_propre }}"
+                        >
+                            {{ taille_propre }}
+                        </button>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+            <p id="erreur-taille" class="message-erreur">
+                Veuillez sélectionner une taille avant de continuer.
+            </p>
+
+            <!-- QUANTITE -->
+            <div class="quantite">
+                <label for="quantite">
+                    QUANTITÉ
+                </label>
+
+                <input
+                    type="number"
+                    id="quantite"
+                    value="1"
+                    min="1"
+                    max="20"
+                >
+            </div>
+
+            <!-- AJOUT AU PANIER -->
+            <button
+                type="button"
+                class="bouton-ajouter"
+                onclick="ajouterAuPanier()"
+            >
+                AJOUTER AU PANIER →
+            </button>
+
+            <div class="livraison">
+                <div class="livraison-icone">🚚</div>
+
+                <div>
+                    <strong>LIVRAISON DISPONIBLE</strong>
+                    <small>Frais de livraison : 5 000 FC</small>
+                </div>
+            </div>
+
+            <p class="garantie">
+                ✓ Commande simple et rapide
+                <br>
+                ✓ Confirmation de la commande par WhatsApp
+                <br>
+                ✓ Paiement et livraison à convenir avec notre équipe
+            </p>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="logo">
+            MAILLOT<span>FLEX.</span>
+        </div>
+
+        <p>
+            TON CLUB, TA PASSION, TON MAILLOT.
+            <br>
+            © 2026 MAILLOT FLEX. Tous droits réservés.
+        </p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        // Données du produit venant de Flask
+        const produit = {
+            id: {{ produit.id | tojson }},
+            name: {{ produit.nom | tojson }},
+            price: {{ produit.prix | tojson }},
+            image: {{ image_principale | tojson }}
+        };
+
+        // Taille sélectionnée
+        let tailleSelectionnee = "";
+
+        // Changer la photo principale
+        function changerImage(bouton) {
+
+            const image = bouton.dataset.image;
+
+            document.getElementById("image-principale").src = image;
+
+            document.querySelectorAll(".miniature").forEach(element => {
+                element.classList.remove("active");
+            });
+
+            bouton.classList.add("active");
+        }
+
+        // Choisir une taille
+        function selectionnerTaille(bouton) {
+
+            document.querySelectorAll(".taille").forEach(element => {
+                element.classList.remove("active");
+            });
+
+            bouton.classList.add("active");
+
+            tailleSelectionnee = bouton.dataset.taille;
+
+            document.getElementById("erreur-taille").style.display = "none";
+        }
+
+        // Ajouter au panier
+        function ajouterAuPanier() {
+
+            if (!tailleSelectionnee) {
+                document.getElementById("erreur-taille").style.display = "block";
+                return;
+            }
+
+            const quantite = parseInt(
+                document.getElementById("quantite").value,
+                10
+            );
+
+            if (!Number.isInteger(quantite) || quantite < 1 || quantite > 20) {
+                alert("Choisis une quantité comprise entre 1 et 20.");
+                return;
+            }
+
+            let panier = [];
+
+            try {
+                panier = JSON.parse(
+                    localStorage.getItem("mailFlexCart")
+                ) || [];
+
+                if (!Array.isArray(panier)) {
+                    panier = [];
+                }
+
+            } catch (erreur) {
+                panier = [];
+            }
+
+            // Vérifier si le produit et la taille existent déjà
+            const existant = panier.find(article =>
+                Number(article.id) === Number(produit.id) &&
+                article.size === tailleSelectionnee
+            );
+
+            if (existant) {
+                existant.quantity += quantite;
+            } else {
+
+                panier.push({
+                    id: produit.id,
+                    name: produit.name,
+                    price: Number(produit.price),
+                    image: produit.image,
+                    size: tailleSelectionnee,
+                    quantity: quantite
+                });
+
+            }
+
+            localStorage.setItem(
+                "mailFlexCart",
+                JSON.stringify(panier)
+            );
+
+            alert("Maillot ajouté au panier avec succès !");
+
+            window.location.href = "{{ url_for('panier') }}";
+        }
+
+    </script>
+
+</body>
+</html>
